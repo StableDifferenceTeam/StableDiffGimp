@@ -1,5 +1,10 @@
 #! /usr/bin/env python2
 from gimpfu import *
+import os
+import sys
+# Fix relative imports in Windows
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(1, path)
 
 
 def center_elements(image, drawable):
@@ -15,7 +20,7 @@ register(
     "Poop Head",
     "Poop Head",
     "2023",
-    "<Image>/Functionality/Center_Elements",
+    "<Image>/StableDifference/Center_Elements",
     "*",
     [],
     [],
