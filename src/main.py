@@ -1,31 +1,58 @@
+#! /usr/bin/env python2
+from gimpfu import *
+
+
+def center_elements(image, drawable):
+    # Add your code to center the visible layers here
+    pass
+
+
+# This is the plugin registration function
+register(
+    "center",
+    "Center visible layers",
+    "Center elements",
+    "Poop Head",
+    "Poop Head",
+    "2023",
+    "<Image>/Functionality/Center_Elements",
+    "*",
+    [],
+    [],
+    center_elements
+)
+
+main()
+
 #!/usr/bin/env python
 
-import gimpfu
+#from gimpfu import *
 
 
-def my_python_function(timg, tdrawable):
-    first_layer = timg.layers[0]
-    first_layer.name = "my first action"
+# def my_python_function(timg, tdrawable):
+#    first_layer = timg.layers[0]
+#    first_layer.name = "my first action"
 
 
-register(
-    proc_name=("my_gimp_name"),
-    blurb=("short description"),
-    help=("long description"),
-    author=("author"),
-    copyright=("owner"),
-    date=("year"),
-    label=(""),
-    imagetypes=("*"),
-    params=[
-        (PF_IMAGE, "")
-    ]
-    results=[]
-    function=(unsere func die wir noch machen),
-    menu=("<Image>/Filters/YourChoice")
-    domain=("gimp20-python", gimp.locale_directory)
-)
-main()
+# register(
+#    proc_name=("my_gimp_name"),
+#    blurb=("short description"),
+#    help=("long description"),
+#    author=("author"),
+#    copyright=("owner"),
+#    date=("year"),
+#    label=(""),
+#    imagetypes=("*"),
+#    params=[
+#        (PF_IMAGE, "")
+#    ]
+#    results=[]
+#    function=(unsere func die wir noch machen),
+#    menu=("<Image>/Filters/YourChoice")
+#    domain=("gimp20-python", gimp.locale_directory),
+#
+# )
+# main()
 
 
 # Workflow for Main (like in the main of stableboy):
