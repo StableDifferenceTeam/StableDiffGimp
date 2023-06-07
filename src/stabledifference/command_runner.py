@@ -17,6 +17,7 @@
 # ----------------------------------------------------------------
 
 from gimpfu import *
+import gimp_functions
 
 # Basic Command runner, no progress updates
 
@@ -35,6 +36,13 @@ def run_stable_diffusion_command(cmd):
         while cmd.status != "DONE":
             pass  # gimp.progress_update(cmd.progress)
         cmd.join()
+        cmd.img.undo_group_start()
+        apply_inpainting_mask = hasattr(
+            cmd, 'apply_inpainting_mask') and cmd.apply_inpainting_mask
+        gimp_functions.create_layers(
+            cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
+        gimp_functions.open_images(cmd.images)
+        cmd.img.undo_group_end()
 
         # TODO unpack, create layers, open images, etc.
 
