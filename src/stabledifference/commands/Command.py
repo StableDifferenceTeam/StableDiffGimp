@@ -1,7 +1,3 @@
-# Command Klasse,
-# sodass alle Commands von dieser Klasse erben können
-
-# basic properties für jeden Command
 
 # Basic Command class, executable by the command runner
 # class Command:

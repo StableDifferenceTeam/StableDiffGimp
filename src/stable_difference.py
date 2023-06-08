@@ -1,24 +1,27 @@
 #! /usr/bin/env python2
-import stabledifference as sdiff
+
+
 from glob import glob
-from gimpfu import *
+import gimpfu
 import os
 import sys
 from importlib import import_module
 import inspect
 import ssl
+
 # Fix relative imports in Windows
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(1, path)
+import stabledifference as sdiff
 
-
-# def center_elements(image, drawable):
-#    # Add your code to center the visible layers here
+#def center_elements(image, drawable):
 #    pass
+#   # Add your code to center the visible layers here
+#   # pass
 #
 #
-# This is the plugin registration function
-# register(
+## This is the plugin registration function
+#register(
 #    "center",
 #    "Center visible layers",
 #    "Center elements",
@@ -68,7 +71,7 @@ sys.path.insert(1, path)
 # Workflow for Main (like in the main of stableboy):
 if __name__ == "__main__":
     # def is_cmd() simple function to check if we are in cmd or not (just precaution)
-    def is_cmd():
+    def is_cmd(obj):
         True
 
     # get all files from folder .stabledifference\commands into cmd_module_locations[]

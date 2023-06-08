@@ -1,12 +1,12 @@
 # text-to-image command
 import gimpfu
-import stable_difference as sdiff
+import stabledifference as sdiff
 from Command import StableDiffusionCommand
 
 
 class TextToImageCommand(StableDiffusionCommand):
     uri = "sdapi/v1/text-to-image"
-    metadata = StableDiffusionCommand.command_metadata(
+    metadata = StableDiffusionCommand.CommandMetadata(
         "TextToImageCommand",
         "StableDifference Text to Image Command " + "v1",  # sdiff.__version__,
         "StableDiffusion Plugin for GIMP",
@@ -26,7 +26,7 @@ class TextToImageCommand(StableDiffusionCommand):
             (gimpfu.PF_SLIDER, 'num_images', 'Number of images', 1, (1, 4, 1)),
             (gimpfu.PF_OPTION, 'img_target', 'Results as',
              0, sdiff.constants.IMAGE_TARGETS),
-
-        ]
-
+            
+        ],
+        []
     )

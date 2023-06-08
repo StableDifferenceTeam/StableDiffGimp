@@ -18,6 +18,7 @@
 
 from gimpfu import *
 import gimp_functions
+from .config import Config as config
 
 # Basic Command runner, no progress updates
 
