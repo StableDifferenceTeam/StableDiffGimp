@@ -93,6 +93,7 @@ if __name__ == "__main__":
         # for each filename in cmd_module_filenames[]:
         for cmd_module_filename in cmd_module_filenames:
             for _, obj in inspect.getmembers(import_module(cmd_module_filename), is_cmd):
+                #print("Reached")
                 # if obj is a valid command and not already registered
                 if obj.__name__ not in registered_cmds:
                     print("Registering command: " + obj.__name__)
