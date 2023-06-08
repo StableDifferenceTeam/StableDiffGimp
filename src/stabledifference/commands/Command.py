@@ -74,6 +74,7 @@ class StableDiffusionCommand(StableBoyCommand):
         self.img = kwargs['image']  # image to be processed
         self.images = None  # images to be processed
         self.layers = None  # layers to be processed
+
         self.x, self.y, self.width, self.height = self._determine_active_area()  # active area
 
         print('x, y, w, h: ' + str(self.x) + ', ' + str(self.y) +

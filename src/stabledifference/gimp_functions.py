@@ -13,6 +13,11 @@ def save_prefs(group_name, **kwargs):
         shelf[group_name + '_' + pref_key] = kwargs[pref_key]
 
 
+def pref_value(group_name, key_name, default=None):
+    full_key = group_name + '_' + key_name
+    return shelf[full_key] if shelf.has_key(full_key) else default
+
+
 # encodes a png image and returns a code
 def encode_png(img_path):
     with open(img_path, "rb") as img:
@@ -43,9 +48,70 @@ def encode_img(img, x, y, width, height):
     os.remove(img_flat_path)
     return encoded_img
 
+
+# defines the active area of an image
+# the active area is the area you select to work on
+def active_area(img):
+    _, x, y, x2, y2 = pdb.gimp_selection_bounds(img)
+    return x, y, x2 - x, y2 - y
+
+
+def autofit_inpainting_area(img):
+    # raise an exception if there is no layer
+    if not pdb.gimp_image_get_layer_by_name(img, constants.MASK_LAYER_NAME):
+        raise Exception("Couldn't find layer named '" +
+                        constants.MASK_LAYER_NAME + "'")
+    img_cpy = pdb.gimp_image_duplicate(img)
+    mask_layer = pdb.gimp_image_get_layer_by_name(
+        img_cpy, constants.MASK_LAYER_NAME)
+    # need to make it the active layer ...
+    pdb.gimp_image_set_active_layer(img_cpy, mask_layer)
+    # ... because this unintuitively crops the active layer (!)
+    pdb.plug_in_autocrop_layer(img_cpy, mask_layer)
+    # calculate width and height
+    target_width = math.ceil(float(mask_layer.width) / 256) * 256
+    target_width = max(512, target_width)
+    target_height = math.ceil(float(mask_layer.height) / 256) * 256
+    target_height = max(512, target_height)
+    mask_center_x = mask_layer.offsets[0] + int(mask_layer.width / 2)
+    mask_center_y = mask_layer.offsets[1] + int(mask_layer.height / 2)
+    x, y = mask_center_x - target_width / 2, mask_center_y - target_height / 2
+    if x + target_width > img_cpy.width:
+        x = img_cpy.width - target_width
+    if y + target_height > img_cpy.height:
+        y = img_cpy.height - target_height
+    if mask_center_x - target_width / 2 < 0:
+        x = 0
+    if mask_center_y - target_height / 2 < 0:
+        y = 0
+    return x, y, target_width, target_height
+
+
+# encodes the mask layer
+def encode_mask(img, x, y, width, height):
+    # raise an exception if there is no layer available
+    if not pdb.gimp_image_get_layer_by_name(img, constants.MASK_LAYER_NAME):
+        raise Exception("Couldn't find layer named '" +
+                        constants.MASK_LAYER_NAME + "'")
+    # creates a duplicate of an image
+    img_cpy = pdb.gimp_image_duplicate(img)
+    for layer in img_cpy.layers:
+        pdb.gimp_item_set_visible(
+            layer, layer.name == constants.MASK_LAYER_NAME)
+    pdb.gimp_image_select_rectangle(img_cpy, 2, x, y, width, height)
+    pdb.gimp_edit_copy_visible(img_cpy)
+    mask_img = pdb.gimp_edit_paste_as_new_image()
+    pdb.gimp_layer_flatten(mask_img.layers[0])
+    mask_img_path = tempfile.mktemp(suffix='.png')
+    pdb.file_png_save_defaults(
+        mask_img, mask_img.layers[0], mask_img_path, mask_img_path)
+    encoded_mask = encode_png(mask_img_path)
+    # print('mask img: ' + mask_img_path)
+    os.remove(mask_img_path)
+    return encoded_mask
+
+
 # decode the previously encoded image
-
-
 def decode_png(encoded_png):
     with open(tempfile.mktemp(suffix='.png'), 'wb') as png_img:
         png_img_path = png_img.name
