@@ -13,7 +13,7 @@ class TextToImageCommand(StableDiffusionCommand):
         "StableDifference",
         "StableDifference",
         "2023",
-        "<image>/StableDifference/Text to Image",  # menu path
+        "<Image>/StableDifference/Text to Image",  # menu path
         "*", [
             (gimpfu.PF_STRING, "prompt", "Prompt", "Enter your Prompt here", ""),
             (gimpfu.PF_STRING, "negative_prompt", "Negative Prompt", ""),
@@ -28,5 +28,5 @@ class TextToImageCommand(StableDiffusionCommand):
              0, sdiff.constants.IMAGE_TARGETS),
             
         ],
-        []
+        [],
     )

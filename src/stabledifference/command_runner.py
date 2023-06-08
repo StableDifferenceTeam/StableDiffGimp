@@ -16,6 +16,7 @@
 
 # ----------------------------------------------------------------
 
+import gtk
 from gimpfu import *
 import gimp_functions
 from .config import Config as config

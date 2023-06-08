@@ -70,9 +70,11 @@ import stabledifference as sdiff
 
 # Workflow for Main (like in the main of stableboy):
 if __name__ == "__main__":
+    
     # def is_cmd() simple function to check if we are in cmd or not (just precaution)
     def is_cmd(obj):
-        True
+        return inspect.isclass(obj) and obj.__name__ not in ['StableBoyCommand', 'StableDiffusionCommand'] \
+            and 'StableBoyCommand' in [cls.__name__ for cls in inspect.getmro(obj)]
 
     # get all files from folder .stabledifference\commands into cmd_module_locations[]
     cmd_module_locations = [["stabledifference", "commands"]]
@@ -90,14 +92,14 @@ if __name__ == "__main__":
 
         # for each filename in cmd_module_filenames[]:
         for cmd_module_filename in cmd_module_filenames:
-            for name, obj in inspect.getmembers(import_module(cmd_module_filename), is_cmd):
+            for _, obj in inspect.getmembers(import_module(cmd_module_filename), is_cmd):
                 # if obj is a valid command and not already registered
                 if obj.__name__ not in registered_cmds:
                     print("Registering command: " + obj.__name__)
 
                     # set command_runner to run_sd_command if StableDiffusionCommand, else run_command
                     if 'StableDiffusionCommand' in [cls.__name__ for cls in inspect.getmro(obj)]:
-                        obj.command_runner = sdiff.run_sd_command
+                        obj.command_runner = sdiff.run_stable_diffusion_command
                     # else is eg. the Preferences Command
                     else:
                         obj.command_runner = sdiff.run_command
