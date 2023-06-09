@@ -5,15 +5,15 @@ from Command import StableDiffusionCommand
 
 
 class TextToImageCommand(StableDiffusionCommand):
-    uri = "sdapi/v1/text-to-image"
+    uri = "sdapi/v1/txt2img"
     metadata = StableDiffusionCommand.CommandMetadata(
         "TextToImageCommand",
-        "StableDifference Text to Image Command " + "v1",  # sdiff.__version__,
+        "Stable Boy " + sdiff.__version__ + " - Text to Image",#"StableDifference Text to Image Command " + "v1",  # sdiff.__version__,
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
         "StableDifference",
         "2023",
-        "<Image>/StableDifference/Text to Image",  # menu path
+        "<Image>/StableDifference/Text to Image/Expert mode",  # menu path
         "*", [
             (gimpfu.PF_STRING, "prompt", "Prompt", "Enter your Prompt here", ""),
             (gimpfu.PF_STRING, "negative_prompt", "Negative Prompt", ""),
