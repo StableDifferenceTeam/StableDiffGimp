@@ -1,0 +1,25 @@
+# Command to toggle Expert Mode and Simple Mode
+import gimpfu
+import stabledifference as sdiff
+from gimpshelf import shelf
+from Command import StableDiffusionCommand
+
+class ModeCommand(StableDiffusionCommand):
+    uri = "sdapi/v1/toggle_expert_mode"
+    metadata = StableDiffusionCommand.CommandMetadata(
+        "Toggle Expert Mode",
+        "Toggle Expert Mode",
+        "StableDiffusion Plugin for GIMP",
+        "StableDifference",
+        "StableDifference",
+        "2023",
+        "<Image>/StableDifference/Toggle Expert Mode",  # menu path
+        "*", [
+            (gimpfu.PF_BOOL, 'expert_mode', "Expert Mode", False),
+        ],
+        [],
+    )
+
+    def __init__(self, **kwargs):
+        # save current mode in db
+        shelf['expert_mode'] = [kwargs['expert_mode']]
