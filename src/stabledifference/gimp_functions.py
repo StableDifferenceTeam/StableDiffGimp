@@ -3,6 +3,7 @@ import tempfile
 from gimpfu import *
 from gimpshelf import shelf
 import base64
+import constants
 
 # saves preferences
 # kwargs allow you to pass keyworded variable length of arguments to a function

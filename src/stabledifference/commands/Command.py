@@ -143,14 +143,14 @@ class StableDiffusionCommand(StableBoyCommand):
 
     def _make_request_data(self, **kwargs):
         return {
-            'prompt': kwargs['prompt'],
-            'negative_prompt': kwargs['negative_prompt'],
-            'steps': kwargs['steps'],
-            'sampler_index': sdiff.constants.SAMPLERS[kwargs['sampler_index']],
-            'batch_size': int(kwargs['num_images']),
-            'cfg_scale': kwargs['cfg_scale'],
-            'seed': kwargs['seed'],
-            'restore_faces': kwargs['restore_faces'],
+            'prompt': kwargs.get('prompt', ''),
+            'negative_prompt': kwargs.get('negative_prompt', ''),
+            'steps': kwargs.get('steps', 25),
+            'sampler_index': sdiff.constants.SAMPLERS[kwargs.get('sampler_index', 0)],
+            'batch_size': int(kwargs.get('num_images', 1)),
+            'cfg_scale': kwargs.get('cfg_scale', 7.5),
+            'seed': kwargs.get('seed', '-1'),
+            'restore_faces': kwargs.get('restore_faces', False),
             'width': self.width,
             'height': self.height,
         }  # evrything that is needed for the request
