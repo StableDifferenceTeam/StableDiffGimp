@@ -1,6 +1,5 @@
 #! /usr/bin/env python2
 
-
 from glob import glob
 import gimpfu
 import os
@@ -14,14 +13,14 @@ path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(1, path)
 import stabledifference as sdiff
 
-#def center_elements(image, drawable):
+# def center_elements(image, drawable):
 #    pass
 #   # Add your code to center the visible layers here
 #   # pass
 #
 #
-## This is the plugin registration function
-#register(
+# This is the plugin registration function
+# register(
 #    "center",
 #    "Center visible layers",
 #    "Center elements",
@@ -70,7 +69,7 @@ import stabledifference as sdiff
 
 # Workflow for Main (like in the main of stableboy):
 if __name__ == "__main__":
-    
+
     # def is_cmd() simple function to check if we are in cmd or not (just precaution)
     def is_cmd(obj):
         return inspect.isclass(obj) and obj.__name__ not in ['StableBoyCommand', 'StableDiffusionCommand'] \
