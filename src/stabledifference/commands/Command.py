@@ -189,3 +189,16 @@ class StableDiffusionCommand(StableBoyCommand):
         if req_data['restore_faces']:
             timeout = int(timeout * 1.2 * config.TIMEOUT_FACTOR)
         return timeout
+
+    # resize (enlarge) the canvas by the padding
+    def _resize_canvas(self, **kwargs):
+
+        new_width = self.width + \
+            kwargs.get('padding_left', 100) + kwargs.get('padding_right', 0)
+        new_height = self.height + \
+            kwargs.get('padding_top', 50) + kwargs.get('padding_bottom', 0)
+
+        x = kwargs.get('padding_right', 0)
+        y = kwargs.get('padding_bottom', 0)
+
+        self.img.resize(new_width, new_height, x, y)
