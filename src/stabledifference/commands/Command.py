@@ -70,7 +70,7 @@ class StableDiffusionCommand(StableBoyCommand):
     def __init__(self, **kwargs):
         StableBoyCommand.__init__(self, **kwargs)
         self.url = urljoin(sdiff.gimp.pref_value(
-            PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL
+            PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL TODO shelf url aus settings?
         self.img = kwargs['image']  # image to be processed
         self.images = None  # images to be processed
         self.layers = None  # layers to be processed
