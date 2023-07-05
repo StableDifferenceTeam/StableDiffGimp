@@ -1,22 +1,24 @@
-# text-to-image command
+# image-to-image command
 import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
 
 
-class TextToImageCommand(StableDiffusionCommand):
-    uri = "sdapi/v1/txt2img"
+class ImageToImageCommand(StableDiffusionCommand):
+    uri = "sdapi/v1/img2img"
     metadata = StableDiffusionCommand.CommandMetadata(
-        "TextToImageCommand",
+        "ImageToImageCommand",
         #"Stable Boy " + sdiff.__version__ + " - Text to Image",
-        "StableDifference " + sdiff.__version__ + ": Text to Image - Expert mode",
+        "StableDifference " + sdiff.__version__ + ": Image to Image - Expert mode",
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
         "StableDifference",
         "2023",
-        "<Image>/StableDifference/Text to Image/Expert mode",  # menu path
+        "<Image>/StableDifference/Image to Image/Expert mode",  # menu path
         "*", [
             (gimpfu.PF_STRING, "prompt", "Prompt", "", ""),
+            (gimpfu.PF_SLIDER, 'denoising_strength',
+             'Denoising Strength %', 50, (0, 100, 1)),
             (gimpfu.PF_STRING, "negative_prompt", "Negative Prompt", ""),
             (gimpfu.PF_STRING, 'seed', 'Seed', '-1'),
             (gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
@@ -31,3 +33,12 @@ class TextToImageCommand(StableDiffusionCommand):
         ],
         [],
     )
+
+    def _make_request_data(self, **kwargs):
+        request_data = StableDiffusionCommand._make_request_data(
+            self, **kwargs)
+        request_data['denoising_strength'] = float(
+            kwargs['denoising_strength']) / 100
+        request_data['init_images'] = [sdiff.gimp.encode_img(
+            self.img, self.x, self.y, self.width, self.height)]
+        return request_data
