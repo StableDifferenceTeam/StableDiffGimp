@@ -38,7 +38,7 @@ class ImageToImageCommand(StableDiffusionCommand):
         request_data = StableDiffusionCommand._make_request_data(
             self, **kwargs)
         request_data['denoising_strength'] = float(
-            kwargs['denoising_strength']) / 100
+            kwargs.get('denoising_strength', 75)) / 100
         request_data['init_images'] = [sdiff.gimp.encode_img(
             self.img, self.x, self.y, self.width, self.height)]
         return request_data
