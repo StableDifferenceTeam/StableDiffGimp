@@ -38,6 +38,9 @@ from stabledifference.command_runner import config
 import stabledifference as sdiff
 from stabledifference.constants import PREFERENCES_SHELF_GROUP as PREFS
 from gimpfu import *
+import threading
+import gtk
+
 
 
 class StableBoyCommand(Thread):
@@ -89,8 +92,18 @@ class StableDiffusionCommand(StableBoyCommand):
         else:
             self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT  # type: ignore
 
+    # the method conducting the request
+    def start_request(self):
+        try:
+            self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
+        except Exception as e:
+            self.error_msg = str(e)
+            self.status = 'ERROR'
+
+
     def run(self):
         self.status = 'RUNNING'
+
         try:
             # prints out a request path
             if config.LOG_REQUESTS:
@@ -99,32 +112,46 @@ class StableDiffusionCommand(StableBoyCommand):
                     print('request: ' + req_path)
                     req_file.write(json.dumps(self.req_data))
 
-            sd_request = Request(url=self.url,
+            # create the request
+            self.sd_request = Request(url=self.url,
                                  headers={'Content-Type': 'application/json'},
                                  data=json.dumps(self.req_data))  # request data
-            # print(self.req_data)
-            self.sd_resp = urlopen(
-                sd_request, timeout=self.timeout)  # start request
-            if self.sd_resp:
-                self.response = json.loads(
-                    self.sd_resp.read())  # read response
-                if config.LOG_REQUESTS:
-                    # create temporary response file
-                    resp_path = tempfile.mktemp(prefix='resp_', suffix='.json')
-                    with open(resp_path, 'w') as resp_file:  # write response to file
-                        print('response: ' + resp_path)
-                        resp_file.write(json.dumps(self.response))
+            
 
-                # process response (see below)
-                self._process_response(self.response)
+            # start it in a parallel thread
+            thread=threading.Thread(target=self.start_request)
+            thread.start()
+            thread.join()
 
-            self.status = 'DONE'
+            # if it failed for some reason
+            if self.status == 'ERROR':
+                print("ERROR while conducting the request:")
+                print(self.error_msg)
+                gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL, 
+                "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
+
+            else:
+                if self.sd_resp:
+                    self.response = json.loads(
+                        self.sd_resp.read())  # read response
+                    if config.LOG_REQUESTS:
+                        # create temporary response file
+                        resp_path = tempfile.mktemp(prefix='resp_', suffix='.json')
+                        with open(resp_path, 'w') as resp_file:  # write response to file
+                            print('response: ' + resp_path)
+                            resp_file.write(json.dumps(self.response))
+
+                    # process response (see below)
+                    self._process_response(self.response)
+
+                self.status = 'DONE'
 
         except Exception as e:  # catch ERROR
-            self.status = 'ERROR'
+
+            print("command exception:")
             self.error_msg = str(e)
             print(e)
-            raise e
+            self.status = 'ERROR'
 
     def _process_response(self, resp):
 
