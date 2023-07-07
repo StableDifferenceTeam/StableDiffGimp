@@ -1,4 +1,4 @@
-DEFAULT_API_URL = "https://f9533f5160dcac865f.gradio.live/"#"https://5bc7-2a02-8070-8981-2880-d0a0-c948-81a1-1f18.ngrok-free.app/"#'http://localhost:7860'
+DEFAULT_API_URL = "https://e20472c73a3ecd5904.gradio.live"#"https://5bc7-2a02-8070-8981-2880-d0a0-c948-81a1-1f18.ngrok-free.app/"#'http://localhost:7860'
 
 MASK_LAYER_NAME = 'Inpainting Mask'
 

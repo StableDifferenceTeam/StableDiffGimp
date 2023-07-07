@@ -1,24 +1,24 @@
-# Inpainting command
+# image-to-image command (simplified)
 import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
+#from commands import ImageToImageCommand
 
 
-class ImageToImageCommand(StableDiffusionCommand):
+class SimpleTextToImageCommand(StableDiffusionCommand):
     uri = "sdapi/v1/img2img"
     metadata = StableDiffusionCommand.CommandMetadata(
-        "ImageToImageCommand",
-        #"Stable Boy " + sdiff.__version__ + " - Text to Image",
-        "StableDifference " + sdiff.__version__ + ": Inpainting - Simple mode",
+        "SimpleImageToImageCommand",
+        "StableDifference " + sdiff.__version__ + ": Image to Image - Simple mode",
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
         "StableDifference",
         "2023",
-        "<Image>/StableDifference/Inpainting",  # menu path
+        "<Image>/StableDifference/Image to Image/Simple mode",  # menu path
         "*", [
             (gimpfu.PF_STRING, "prompt", "Prompt", "", ""),
-            
-
+            (gimpfu.PF_SLIDER, 'denoising_strength',
+             'Denoising Strength %', 50, (0, 100, 1)),
         ],
         [],
     )
