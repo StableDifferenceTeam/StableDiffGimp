@@ -32,17 +32,22 @@ class Uncrop(StableDiffusionCommand):  # change to stablediffusioncommand
         
         #StableDiffusionCommand.__init__(self, **kwargs)
 
-    def run(self, **kwargs):
-        params = self.metadata.params
-        print(params)
-        #kwargs.update(
-        #    dict(zip(["padding_left", "padding_right", "padding_top", "padding_bottom"], (param[3] for param in self.metadata.params[]))))
-        kwargs.update(dict(zip(["padding_left", "padding_right", "padding_top", "padding_bottom"], [params[3][3], params[4][3], params[5][3], params[6][3]])))
-        print(kwargs)
-        print("-----------------------------------")
-        print(self.metadata.params)
+    def _make_request_data(self, **kwargs):
         StableDiffusionCommand._resize_canvas(self, **kwargs)
-        StableBoyCommand.run(self)
+        return StableDiffusionCommand._make_request_data(self, **kwargs)
+
+
+    #def run(self, **kwargs):
+    #    params = self.metadata.params
+    #    print(params)
+    #    #kwargs.update(
+    #    #    dict(zip(["padding_left", "padding_right", "padding_top", "padding_bottom"], (param[3] for param in self.metadata.params[]))))
+    #    kwargs.update(dict(zip(["padding_left", "padding_right", "padding_top", "padding_bottom"], [params[3][3], params[4][3], params[5][3], params[6][3]])))
+    #    print(kwargs)
+    #    print("-----------------------------------")
+    #    print(self.metadata.params)
+    #    StableDiffusionCommand._resize_canvas(self, **kwargs)
+    #    StableBoyCommand.run(self)
 
  
         

@@ -165,13 +165,17 @@ class StableDiffusionCommand(StableBoyCommand):
 
     # resize (enlarge) the canvas by the padding
     def _resize_canvas(self, **kwargs):
+        pad_left = kwargs.get('padding_left', 0)
+        pad_right = kwargs.get('padding_right', 0)
+        pad_top =  kwargs.get('padding_top', 0)
+        pad_btm = kwargs.get('padding_bottom', 0)
 
-        new_width = self.width + \
-            kwargs.get('padding_left', 100) + kwargs.get('padding_right', 0)
-        new_height = self.height + \
-            kwargs.get('padding_top', 50) + kwargs.get('padding_bottom', 0)
 
-        x = kwargs.get('padding_right', 0)
-        y = kwargs.get('padding_bottom', 0)
+        new_width = self.width + pad_left + pad_right
+        new_height = self.height + pad_top + pad_btm
+
+        x = pad_left
+        y = pad_top
 
         self.img.resize(new_width, new_height, x, y)
+        
