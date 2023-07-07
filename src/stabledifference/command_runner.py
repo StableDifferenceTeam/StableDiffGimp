@@ -35,18 +35,23 @@ def run_stable_diffusion_command(cmd):
         cmd.start()
         # TODO add some progress updates here (aesthetics)
 
-        while cmd.status != "DONE":
-            pass  # gimp.progress_update(cmd.progress)
-        cmd.join()
-        cmd.img.undo_group_start()
-        apply_inpainting_mask = hasattr(
-            cmd, 'apply_inpainting_mask') and cmd.apply_inpainting_mask
-        gimp_functions.create_layers(
-            cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
-        gimp_functions.open_images(cmd.images)
-        cmd.img.undo_group_end()
+        # wait for the command to complete
+        while cmd.status != "DONE" and cmd.status != "ERROR":
+            pass
+        if cmd.status == "ERROR":
+            pass
+        else:
+            cmd.join()
+            cmd.img.undo_group_start()
+            apply_inpainting_mask = hasattr(
+                cmd, 'apply_inpainting_mask') and cmd.apply_inpainting_mask
+            gimp_functions.create_layers(
+                cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
+            gimp_functions.open_images(cmd.images)
+            cmd.img.undo_group_end()
 
         # TODO unpack, create layers, open images, etc.
 
     except Exception as e:
         print("Error: " + str(e))
+        
