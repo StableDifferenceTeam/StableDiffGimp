@@ -17,9 +17,9 @@ class SettingsCommand(StableDiffusionCommand):
         "<Image>/StableDifference/Settings", # label
         "*", # imagetypes
         [ #params
-            (gimpfu.PF_BOOL, 'expert_mode', "Expert Mode", False),
-            (gimpfu.PF_STRING, 'api_base_url', 'API Base URL', "API Base URL", sdiff.constants.DEFAULT_API_URL)
-            # add extra settings here
+            (gimpfu.PF_BOOL, 'expert_mode', "Expert Mode", shelf['expert_mode']),
+            (gimpfu.PF_STRING, 'api_base_url', 'API Base URL', "API Base URL", shelf['api_base_url'])
+            # add extra settings here; if you add settings, make sure to also add them in stable_difference.py for initialization
         ],
         [], # results
     )

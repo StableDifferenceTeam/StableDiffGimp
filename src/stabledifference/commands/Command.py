@@ -38,6 +38,7 @@ from stabledifference.command_runner import config
 import stabledifference as sdiff
 from stabledifference.constants import PREFERENCES_SHELF_GROUP as PREFS
 from gimpfu import *
+from gimpshelf import shelf
 
 
 class StableBoyCommand(Thread):
@@ -70,7 +71,7 @@ class StableDiffusionCommand(StableBoyCommand):
     def __init__(self, **kwargs):
         StableBoyCommand.__init__(self, **kwargs)
         self.url = urljoin(sdiff.gimp.pref_value(
-            PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL TODO shelf url aus settings?
+            PREFS, 'api_base_url', shelf['api_base_url']), self.uri) # uses api url from settings
         self.img = kwargs['image']  # image to be processed
         self.images = None  # images to be processed
         self.layers = None  # layers to be processed

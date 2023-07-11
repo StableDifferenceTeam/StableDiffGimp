@@ -7,6 +7,8 @@ import sys
 from importlib import import_module
 import inspect
 import ssl
+import json
+from gimpshelf import shelf
 
 # Fix relative imports in Windows
 path = os.path.dirname(os.path.abspath(__file__))
@@ -111,6 +113,8 @@ if __name__ == "__main__":
 
     ssl._create_default_https_context = ssl._create_unverified_context
 
+    initiateDb()
+
     gimpfu.main()
 
 #  if obj not in registered_cmds[] and obj.is_cmd():
@@ -121,3 +125,16 @@ if __name__ == "__main__":
 # In stable Boy stable diffusion and other commands are differentiated,
 # but thats stuff we gotta worry about later i'd say.
 # other commands include setting Preferences, etc.
+
+def initiateDb():
+    try:
+        settingsFile = json.load(open("settings.json", "a")) # load settings file in write mode or create it if it does not exist
+    except:
+        print("There was an error opening the settings file.") # make sure there are no unexpected problems 
+        return
+    if len(settingsFile == 0): # if the file is newly created -> json.load will produce a dictionary but it will be empty so we initiate it with our default values
+        settingsFile.update({"expert_mode": False}) # expert mode is initiated with false
+        settingsFile.update({"api_base_url": sdiff.constants.DEFAULT_API_URL}) # api base url is initiated with the one specified in constants
+        json.dump(settingsFile)
+    shelf['expert_mode'] = settingsFile['expert_mode']
+    shelf['api_base_url'] = settingsFile['api_base_url']
