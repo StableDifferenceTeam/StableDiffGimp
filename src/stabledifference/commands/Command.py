@@ -205,4 +205,5 @@ class StableDiffusionCommand(StableBoyCommand):
         y = pad_top
 
         self.img.resize(new_width, new_height, x, y)
-        
+
+            

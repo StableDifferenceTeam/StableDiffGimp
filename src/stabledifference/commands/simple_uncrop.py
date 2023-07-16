@@ -33,6 +33,7 @@ class Uncrop(StableDiffusionCommand):  # change to stablediffusioncommand
         #StableDiffusionCommand.__init__(self, **kwargs)
 
     def _make_request_data(self, **kwargs):
+        
         StableDiffusionCommand._resize_canvas(self, **kwargs)
         return StableDiffusionCommand._make_request_data(self, **kwargs)
 

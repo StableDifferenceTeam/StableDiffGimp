@@ -99,10 +99,18 @@ def encode_mask(img, x, y, width, height):
     for layer in img_cpy.layers:
         pdb.gimp_item_set_visible(
             layer, layer.name == constants.MASK_LAYER_NAME)
+
+    #TODO blur the mask
+    #pdb.gimp_image_undo_group_start(img_cpy)
+    #pdb.plug_in_gauss(img_cpy, pdb.gimp_image_get_layer_by_name(img_cpy, constants.MASK_LAYER_NAME), 20, 20, 1)
+    #pdb.gimp_image_undo_group_end(img_cpy)    
+
     pdb.gimp_image_select_rectangle(img_cpy, 2, x, y, width, height)
     pdb.gimp_edit_copy_visible(img_cpy)
     mask_img = pdb.gimp_edit_paste_as_new_image()
     pdb.gimp_layer_flatten(mask_img.layers[0])
+
+
     mask_img_path = tempfile.mktemp(suffix='.png')
     pdb.file_png_save_defaults(
         mask_img, mask_img.layers[0], mask_img_path, mask_img_path)
