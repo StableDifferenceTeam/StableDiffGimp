@@ -46,7 +46,5 @@ def run_stable_diffusion_command(cmd):
         gimp_functions.open_images(cmd.images)
         cmd.img.undo_group_end()
 
-        # TODO unpack, create layers, open images, etc.
-
     except Exception as e:
         print("Error: " + str(e))

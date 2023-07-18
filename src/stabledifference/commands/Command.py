@@ -117,8 +117,8 @@ class StableDiffusionCommand(StableBoyCommand):
 
                 # process response (see below)
                 self._process_response(self.response)
-
             self.status = 'DONE'
+            # self._post_process(self)
 
         except Exception as e:  # catch ERROR
             self.status = 'ERROR'
@@ -165,18 +165,21 @@ class StableDiffusionCommand(StableBoyCommand):
 
     # resize (enlarge) the canvas by the padding
     def _resize_canvas(self, **kwargs):
-        pad_left = kwargs.get('padding_left', 0)
-        pad_right = kwargs.get('padding_right', 0)
-        pad_top =  kwargs.get('padding_top', 0)
-        pad_btm = kwargs.get('padding_bottom', 0)
+        pad_left = kwargs.get('padding_left', 128)
+        pad_right = kwargs.get('padding_right', 128)
+        pad_top = kwargs.get('padding_top', 128)
+        pad_btm = kwargs.get('padding_bottom', 128)
 
-
+        # resize canvas
         new_width = self.width + pad_left + pad_right
         new_height = self.height + pad_top + pad_btm
 
         x = pad_left
         y = pad_top
 
-        self.img.resize(new_width, new_height, x, y)
+        pdb.gimp_image_resize(self.img, new_width, new_height, x, y)
+        for layer in self.img.layers:
+            pdb.gimp_layer_resize_to_image_size(layer)
 
-            
+    def _post_process(self):
+        pass

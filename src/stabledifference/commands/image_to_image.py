@@ -8,7 +8,6 @@ class ImageToImageCommand(StableDiffusionCommand):
     uri = "sdapi/v1/img2img"
     metadata = StableDiffusionCommand.CommandMetadata(
         "ImageToImageCommand",
-        #"Stable Boy " + sdiff.__version__ + " - Text to Image",
         "StableDifference " + sdiff.__version__ + ": Image to Image - Expert mode",
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
