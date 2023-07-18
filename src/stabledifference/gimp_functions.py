@@ -88,28 +88,26 @@ def autofit_inpainting_area(img):
     return x, y, target_width, target_height
 
 
-# encodes the mask layer
 def encode_mask(img, x, y, width, height):
     # raise an exception if there is no layer available
     if not pdb.gimp_image_get_layer_by_name(img, constants.MASK_LAYER_NAME):
         raise Exception("Couldn't find layer named '" +
                         constants.MASK_LAYER_NAME + "'")
+
     # creates a duplicate of an image
     img_cpy = pdb.gimp_image_duplicate(img)
     for layer in img_cpy.layers:
         pdb.gimp_item_set_visible(
             layer, layer.name == constants.MASK_LAYER_NAME)
 
-    #TODO blur the mask
-    #pdb.gimp_image_undo_group_start(img_cpy)
-    #pdb.plug_in_gauss(img_cpy, pdb.gimp_image_get_layer_by_name(img_cpy, constants.MASK_LAYER_NAME), 20, 20, 1)
-    #pdb.gimp_image_undo_group_end(img_cpy)    
+    # feather the selection
+    pdb.gimp_context_set_feather(True)
+    pdb.gimp_context_set_feather_radius(10, 10)
 
     pdb.gimp_image_select_rectangle(img_cpy, 2, x, y, width, height)
     pdb.gimp_edit_copy_visible(img_cpy)
     mask_img = pdb.gimp_edit_paste_as_new_image()
     pdb.gimp_layer_flatten(mask_img.layers[0])
-
 
     mask_img_path = tempfile.mktemp(suffix='.png')
     pdb.file_png_save_defaults(
