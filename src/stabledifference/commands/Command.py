@@ -118,7 +118,7 @@ class StableDiffusionCommand(StableBoyCommand):
                 # process response (see below)
                 self._process_response(self.response)
             self.status = 'DONE'
-            # self._post_process(self)
+            self._post_process()
 
         except Exception as e:  # catch ERROR
             self.status = 'ERROR'
