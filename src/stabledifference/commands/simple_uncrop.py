@@ -1,9 +1,8 @@
-import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
 from Command import StableBoyCommand
 from image_to_image import ImageToImageCommand
-import hashlib
+import gimpfu
 
 
 class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
@@ -23,6 +22,7 @@ class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
             (gimpfu.PF_SLIDER, "padding_top", "Padding top", 128, (0, 256, 1)),
             (gimpfu.PF_SLIDER, "padding_bottom",
              "Padding bottom", 128, (0, 256, 1)),
+            (gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
         ],
         [],
     )
@@ -77,22 +77,7 @@ class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
 
         return request_data
 
-    # def _process_response(self, resp):
-#
-    #    def _mk_short_hash(img):  # create hash for image
-    #        return hashlib.sha1(img.encode("UTF-8")).hexdigest()[:7]
-#
-    #    all_imgs = resp['images']  # get images from response
-#
-    #    if self.img_target == 'Layers':  # if layers are the target
-    #        self.layers = [StableDiffusionCommand.LayerResult(
-    #            _mk_short_hash(img), img, None) for img in all_imgs]  # create layer result
-    #        # translate layers
-    #        for layer in self.layers:
-    #            raise Exception(str(self.padding_left))
-    #    elif self.img_target == 'Images':  # if images are the target
-    #        self.images = all_imgs  # create image result
-
-        # crop images to original size
-        # for layer in self.layers:
-        #    layer.gimp_image_crop(512, 512, 0, 0)
+    def _post_process(self):
+      print(str(self.padding_left) + " : " + str(self.padding_top))
+      #for layer in self.layers:
+      #    layer.gimp_layer_translate(layer, -50, -50)
