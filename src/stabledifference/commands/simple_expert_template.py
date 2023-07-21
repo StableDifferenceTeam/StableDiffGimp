@@ -21,13 +21,13 @@ class SimpleExpertCommand(StableDiffusionCommand):
             #(gimpfu.PF_BOOL, 'expert', 'Show advanced options', True),
         ],
         [],
+        
     )
-
-
-"""
+    """
     def _make_request_data(self, **kwargs):
         request_data = StableDiffusionCommand._make_request_data(
             self, **kwargs)
+        #raise Exception(kwargs)
         if kwargs['expert']:
             request_data = self._show_advanced_options(request_data)
         return request_data
@@ -100,3 +100,5 @@ class SimpleExpertCommand(StableDiffusionCommand):
         dialog.destroy()
         return request_data
 """
+
+    """
