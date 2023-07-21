@@ -74,6 +74,7 @@ class StableDiffusionCommand(StableBoyCommand):
         self.img = kwargs['image']  # image to be processed
         self.images = None  # images to be processed
         self.layers = None  # layers to be processed
+        self.uncrop = False
 
         self.x, self.y, self.width, self.height = self._determine_active_area()  # active area
 
@@ -118,7 +119,7 @@ class StableDiffusionCommand(StableBoyCommand):
                 # process response (see below)
                 self._process_response(self.response)
             self.status = 'DONE'
-            self._post_process()
+            # TODO self._post_process()
 
         except Exception as e:  # catch ERROR
             self.status = 'ERROR'
@@ -181,5 +182,11 @@ class StableDiffusionCommand(StableBoyCommand):
         for layer in self.img.layers:
             pdb.gimp_layer_resize_to_image_size(layer)
 
-    def _post_process(self):
-        pass
+    def _rescale_uncrop(self, layers_names):
+        translate_x = self.padding - self.padding_left
+        translate_y = self.padding - self.padding_top
+
+        for layer_name in layers_names:
+            #layer = pdb.gimp_image_get_layer_by_name(self.img, layer_name)
+            pdb.gimp_layer_translate(pdb.gimp_image_get_layer_by_name(self.img, layer_name), -translate_x, -translate_y)
+            pdb.gimp_layer_resize_to_image_size(pdb.gimp_image_get_layer_by_name(self.img, layer_name))

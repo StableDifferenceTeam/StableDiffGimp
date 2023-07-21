@@ -33,6 +33,13 @@ class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
         self.padding_right = kwargs.get('padding_right', 128)
         self.padding_top = kwargs.get('padding_top', 128)
         self.padding_bottom = kwargs.get('padding_bottom', 128)
+        padding_max = max(self.padding_left, self.padding_right, self.padding_top, self.padding_bottom)
+        if padding_max > 128:
+            self.padding = 256
+        else:
+            self.padding = 128
+
+        self.uncrop = True
 
     def _make_request_data(self, **kwargs):
         request_data = ImageToImageCommand._make_request_data(self, **kwargs)
@@ -77,7 +84,7 @@ class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
 
         return request_data
 
-    def _post_process(self):
-      print(str(self.padding_left) + " : " + str(self.padding_top))
-      #for layer in self.layers:
-      #    layer.gimp_layer_translate(layer, -50, -50)
+    #def _post_process(self):
+    #  print(str(self.padding_left) + " : " + str(self.padding_top))
+    #  for layer in self.layers:
+    #      layer.gimp_layer_translate(layer, -50, -50)
