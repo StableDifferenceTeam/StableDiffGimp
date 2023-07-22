@@ -92,14 +92,7 @@ class StableDiffusionCommand(StableBoyCommand):
         else:
             self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT  # type: ignore
 
-    # the method conducting the request
-    def start_request(self):
-        try:
-            self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
-        except Exception as e:
-            self.error_msg = str(e)
-            self.status = 'ERROR'
-
+    
 
     def run(self):
         self.status = 'RUNNING'
@@ -117,11 +110,14 @@ class StableDiffusionCommand(StableBoyCommand):
                                  headers={'Content-Type': 'application/json'},
                                  data=json.dumps(self.req_data))  # request data
             
+            # try to make the request
+            try:
+                self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
+            except Exception as e:
+                self.error_msg = str(e)
+                self.status = 'ERROR'
 
-            # start it in a parallel thread
-            thread=threading.Thread(target=self.start_request)
-            thread.start()
-            thread.join()
+            
 
             # if it failed for some reason
             if self.status == 'ERROR':
@@ -130,6 +126,7 @@ class StableDiffusionCommand(StableBoyCommand):
                 gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL, 
                 "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
 
+            # if it didnt fail, process the answer
             else:
                 if self.sd_resp:
                     self.response = json.loads(
