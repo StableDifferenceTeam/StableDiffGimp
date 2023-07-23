@@ -144,22 +144,28 @@ def create_layers(img, layers, x, y, apply_inpainting_mask=False):
         return
     inp_mask_layer = pdb.gimp_image_get_layer_by_name(
         img, constants.MASK_LAYER_NAME)
+    
+    layers_names = []
 
     # creates parent and child layers (nested)
-    def _create_nested_layers(parent_layer, layers):
+    def _create_nested_layers(parent_layer, layers, layers_names):
         for layer in layers:
             if layer.children:
                 gimp_layer_group = pdb.gimp_layer_group_new(img)
                 gimp_layer_group.name = layer.name
+                print(layer.name)
+                layers_names.append(layer.name) #TODO
                 pdb.gimp_image_insert_layer(
                     img, gimp_layer_group, parent_layer, 0)
-                _create_nested_layers(gimp_layer_group, layer.children)
+                _create_nested_layers(gimp_layer_group, layer.children, layers_names)
             elif layer.img:
                 tmp_png_path = decode_png(layer.img)
                 png_img = pdb.file_png_load(tmp_png_path, tmp_png_path)
                 gimp_layer = pdb.gimp_layer_new_from_drawable(
                     png_img.layers[0], img)
                 gimp_layer.name = layer.name
+                print(layer.name)
+                layers_names.append(layer.name)
                 pdb.gimp_layer_set_offsets(gimp_layer, x, y)
                 pdb.gimp_image_insert_layer(img, gimp_layer, parent_layer, 0)
                 pdb.gimp_layer_add_alpha(gimp_layer)
@@ -170,10 +176,13 @@ def create_layers(img, layers, x, y, apply_inpainting_mask=False):
                     pdb.gimp_edit_cut(gimp_layer)
                 pdb.gimp_image_delete(png_img)
                 os.remove(tmp_png_path)
+        return layers_names
 
     # When no parent layer exists, get the mask layer to the top
-    _create_nested_layers(parent_layer=None, layers=layers)
+    layers_names = _create_nested_layers(parent_layer=None, layers=layers, layers_names=layers_names)
     pdb.gimp_selection_none(img)
     if inp_mask_layer:
         pdb.gimp_image_raise_item_to_top(img, inp_mask_layer)
         pdb.gimp_item_set_visible(inp_mask_layer, False)
+
+    return layers_names
