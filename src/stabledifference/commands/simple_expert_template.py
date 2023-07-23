@@ -16,17 +16,18 @@ class SimpleExpertCommand(StableDiffusionCommand):
         "2023",
         "<Image>/StableDifference/Simple Expert Test",  # menu path
         "*", [
-            (gimpfu.PF_STRING, "prompt", "Prompt", "", ""),
-            (gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
-            (gimpfu.PF_BOOL, 'expert', 'Show advanced options', True),
+            #(gimpfu.PF_STRING, "prompt", "Prompt", "", ""),
+            #(gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
+            #(gimpfu.PF_BOOL, 'expert', 'Show advanced options', True),
         ],
         [],
     )
 
+
+"""
     def _make_request_data(self, **kwargs):
         request_data = StableDiffusionCommand._make_request_data(
             self, **kwargs)
-        raise Exception(kwargs)
         if kwargs['expert']:
             request_data = self._show_advanced_options(request_data)
         return request_data
@@ -98,3 +99,4 @@ class SimpleExpertCommand(StableDiffusionCommand):
             request_data['seed'] = seed.get_text()
         dialog.destroy()
         return request_data
+"""

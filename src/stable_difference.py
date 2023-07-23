@@ -104,7 +104,8 @@ if __name__ == "__main__":
                         obj.command_runner = sdiff.run_command
 
                     # register command
-                    gimpfu.register(*obj.metadata, function=obj.run_command)
+                    gimpfu.register(
+                        *obj.metadata, function=obj._show_advanced_options)
 
                     # add command to registered_cmds[] to avoid double registration (just precaution)
                     registered_cmds.append(obj.__name__)

@@ -37,7 +37,8 @@ from collections import namedtuple
 from stabledifference.command_runner import config
 import stabledifference as sdiff
 from stabledifference.constants import PREFERENCES_SHELF_GROUP as PREFS
-from gimpfu import *
+import gimpfu
+import gtk
 
 
 class StableBoyCommand(Thread):
@@ -63,6 +64,108 @@ class StableBoyCommand(Thread):
         Thread.__init__(self)
         self.status = 'INITIALIZED'
 
+    # -----------------------------------------------------------------------
+
+    @classmethod
+    def _show_advanced_options(self, image, drawable, **kwargs):
+        request_data = {}
+
+        # Create a new GTK dialog
+        dialog = gtk.Dialog(title='blabla - Expert mode')
+        dialog.set_border_width(10)
+
+        # Create a new GTK entry field for the prompt
+        prompt_label = gtk.Label('Prompt')
+        prompt_entry = gtk.Entry()
+        prompt_entry.set_text('')
+
+        # Create a new GTK button to show/hide the advanced options
+        advanced_button = gtk.Button(label='Expand')
+        advanced_button.connect(
+            'clicked', lambda button: self._toggle_advanced_options(self, dialog, advanced_button))
+
+        # Pack the prompt entry and the advanced button into the dialog
+        dialog.vbox.pack_start(prompt_label, True, True, 0)
+        dialog.vbox.pack_start(prompt_entry, True, True, 0)
+        dialog.vbox.pack_start(advanced_button, True, True, 0)
+
+        # Add the OK and Cancel buttons to the dialog
+        dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+
+        # Show the dialog
+        dialog.show_all()
+
+        # Run the dialog and get the response
+        response = dialog.run()
+        if response == gtk.RESPONSE_OK:
+            request_data['prompt'] = prompt_entry.get_text()
+        ##request_data['sampler_index'] = sampler_index.get_active()
+        #request_data['restore_faces'] = restore_faces.get_active()
+        #request_data['cfg_scale'] = cfg_scale.get_value()
+        #request_data['num_images'] = num_images.get_value()
+        ##request_data['img_target'] = img_target.get_active()
+        #request_data['negative_prompt'] = negative_prompt.get_text()
+        #request_data['seed'] = seed.get_text()
+        ##request_data['text'] = text
+        dialog.destroy()
+        print(request_data)
+        return request_data
+
+    def _toggle_advanced_options(self, dialog, button):
+        # Toggle the visibility of the advanced options
+        if button.get_label() == 'Expand':
+            button.set_label('Collapse')
+            self._add_advanced_options(dialog)
+        else:
+            button.set_label('Expand')
+            self._remove_advanced_options(dialog)
+
+    def _add_advanced_options(dialog):
+        # Create the advanced options widgets
+        restore_faces = gtk.CheckButton(label='Restore faces')
+
+        cfg_scale_label = gtk.Label('CFG')
+        cfg_scale = gtk.HScale()
+        cfg_scale.set_range(0, 20)
+        cfg_scale.set_increments(0.5, 1)
+        cfg_scale.set_value(7.5)
+
+        num_images_label = gtk.Label('Number of images')
+        num_images = gtk.SpinButton()
+        num_images.set_range(1, 4)
+        num_images.set_increments(1, 1)
+        num_images.set_value(1)
+
+        negative_prompt_label = gtk.Label('Negative Prompt')
+        negative_prompt = gtk.Entry()
+
+        seed_label = gtk.Label('Seed')
+        seed = gtk.Entry()
+        seed.set_text('-1')
+
+        # Pack the advanced options into the dialog
+        dialog.vbox.pack_start(restore_faces, True, True, 0)
+        dialog.vbox.pack_start(cfg_scale_label, True, True, 0)
+        dialog.vbox.pack_start(cfg_scale, True, True, 0)
+        dialog.vbox.pack_start(num_images_label, True, True, 0)
+        dialog.vbox.pack_start(num_images, True, True, 0)
+        dialog.vbox.pack_start(negative_prompt_label, True, True, 0)
+        dialog.vbox.pack_start(negative_prompt, True, True, 0)
+        dialog.vbox.pack_start(seed_label, True, True, 0)
+        dialog.vbox.pack_start(seed, True, True, 0)
+
+        # Show the advanced options
+        dialog.show_all()
+
+    def _remove_advanced_options(dialog):
+        # Remove the advanced options from the dialog
+        for child in dialog.vbox.get_children():
+            if child != dialog.action_area.get_children()[0]:
+                dialog.vbox.remove(child)
+        dialog.show_all()
+    # -----------------------------------------------------------------------
+
 
 class StableDiffusionCommand(StableBoyCommand):
     uri = ''
@@ -80,14 +183,14 @@ class StableDiffusionCommand(StableBoyCommand):
         print('x, y, w, h: ' + str(self.x) + ', ' + str(self.y) +
               ', ' + str(self.width) + ', ' + str(self.height))
 
-        self.img_target = sdiff.constants.IMAGE_TARGETS[kwargs.get(
-            'img_target', 0)]  # layers are the default img_target
+        # self.img_target = sdiff.constants.IMAGE_TARGETS[kwargs.get(
+        #    'img_target', 0)]  # layers are the default img_target
 
-        self.req_data = self._make_request_data(**kwargs)
-        if config.TIMEOUT_REQUESTS:
-            self.timeout = self._estimate_timeout(self.req_data)
-        else:
-            self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT  # type: ignore
+        #self.req_data = self._make_request_data(**kwargs)
+        # if config.TIMEOUT_REQUESTS:
+        #    self.timeout = self._estimate_timeout(self.req_data)
+        # else:
+        #    self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT  # type: ignore
 
     def run(self):
         self.status = 'RUNNING'
@@ -117,6 +220,7 @@ class StableDiffusionCommand(StableBoyCommand):
 
                 # process response (see below)
                 self._process_response(self.response)
+            pdb.gimp_message('StableDiffusion: ' + self.status)
 
             self.status = 'DONE'
 
