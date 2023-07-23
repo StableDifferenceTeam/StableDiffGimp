@@ -52,4 +52,4 @@ def run_stable_diffusion_command(cmd):
         cmd.img.undo_group_end()
 
     except Exception as e:
-        
+        print("Error: " + str(e))
