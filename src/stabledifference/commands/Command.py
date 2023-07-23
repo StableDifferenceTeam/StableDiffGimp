@@ -183,8 +183,8 @@ class StableDiffusionCommand(StableBoyCommand):
             pdb.gimp_layer_resize_to_image_size(layer)
 
     def _rescale_uncrop(self, layers_names):
-        translate_x = self.padding - self.padding_left
-        translate_y = self.padding - self.padding_top
+        translate_x = self.padding - self.padding_left if self.padding_left > 0 else 0
+        translate_y = self.padding - self.padding_top if self.padding_top > 0 else 0
 
         for layer_name in layers_names:
             #layer = pdb.gimp_image_get_layer_by_name(self.img, layer_name)
