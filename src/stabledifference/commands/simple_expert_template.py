@@ -100,5 +100,3 @@ class SimpleExpertCommand(StableDiffusionCommand):
         dialog.destroy()
         return request_data
 """
-
-    """
