@@ -37,10 +37,9 @@ from collections import namedtuple
 from stabledifference.command_runner import config
 import stabledifference as sdiff
 from stabledifference.constants import PREFERENCES_SHELF_GROUP as PREFS
-from gimpfu import *
+import gimpfu
 import threading
 import gtk
-
 
 
 class StableBoyCommand(Thread):
@@ -51,6 +50,9 @@ class StableBoyCommand(Thread):
     # we initialize the metadata with None, because it is set in the run_command method
     metadata = None
     command_runner = None
+    name = "Name not found"
+    simple_args = []
+    expert_args = []
 
     @classmethod
     def run_command(cls, *args, **kwargs):
@@ -65,6 +67,162 @@ class StableBoyCommand(Thread):
     def __init__(self, **kwargs):
         Thread.__init__(self)
         self.status = 'INITIALIZED'
+
+    # -----------------------------------------------------------------------
+
+    @classmethod
+    def _show_advanced_options(self, image, drawable, **kwargs):
+
+        # -----------------------------------------------------------------------
+
+        def _toggle_advanced_options(self, dialog, button):
+            # Toggle the visibility of the advanced options
+            if button.get_label() == 'Expand':
+                button.set_label('Collapse')
+                _add_options(self.expert_args, dialog)
+            else:
+                button.set_label('Expand')
+                _remove_advanced_options(self, dialog)
+
+        def _add_options(options, dialog):
+            for option in options:
+
+                if option[0] == "STRING":
+                    new_label = gtk.Label(option[2])
+                    new_entry = gtk.Entry()
+                    new_entry.set_name(option[2])
+                    new_entry.set_text(option[3])
+                    dialog.vbox.pack_start(new_label, True, True, 0)
+                    dialog.vbox.pack_start(new_entry, True, True, 0)
+
+                elif option[0] == "SLIDER":
+                    new_label = gtk.Label(option[2])
+                    new_slider = gtk.HScale()
+                    new_slider.set_name(option[2])
+                    new_slider.set_range(option[4][0], option[4][1])
+                    new_slider.set_increments(option[4][2], option[4][2])
+                    new_slider.set_value(option[3])
+                    dialog.vbox.pack_start(new_label, True, True, 0)
+                    dialog.vbox.pack_start(new_slider, True, True, 0)
+
+                # TODO fix OptionMenu
+                # elif option[0] == "OPTION":
+                #    new_label = gtk.Label(option[2])
+                #    new_option = gtk.OptionMenu()
+                #    new_option.set_menu(option[4])
+                #    new_option.set_history(option[3])
+                #    dialog.vbox.pack_start(new_label, True, True, 0)
+                #    dialog.vbox.pack_start(new_option, True, True, 0)
+
+                elif option[0] == "BOOL":
+                    new_bool = gtk.CheckButton()
+                    new_bool.set_label(option[2])
+                    new_bool.set_active(option[3])
+                    dialog.vbox.pack_start(new_label, True, True, 0)
+                    dialog.vbox.pack_start(new_bool, True, True, 0)
+
+                elif option[0] == "SPIN_BTN":
+                    new_label = gtk.Label(option[2])
+                    new_spinbtn = gtk.SpinButton()
+                    new_spinbtn.set_name(option[2])
+                    new_spinbtn.set_range(option[4][0], option[4][1])
+                    new_spinbtn.set_increments(option[4][2], option[4][2])
+                    new_spinbtn.set_value(option[3])
+                    dialog.vbox.pack_start(new_label, True, True, 0)
+                    dialog.vbox.pack_start(new_spinbtn, True, True, 0)
+
+            dialog.show_all()
+
+        def _remove_advanced_options(self, dialog):
+            expert_options = self.expert_args
+            for i in range(len(expert_options)):
+                option = expert_options[i]
+                for widget in dialog.vbox.get_children():
+                    if isinstance(widget, gtk.Label) and widget.get_text() == option[2]:
+                        widget.destroy()
+                    elif isinstance(widget, gtk.HScale) and widget.get_name() == option[2]:
+                        self.expert_args[i] = (
+                            option[0], option[1], option[2], widget.get_value(), option[4])
+                        widget.destroy()
+                    elif isinstance(widget, gtk.CheckButton) and widget.get_label() == option[2]:
+                        # TODO fix
+                        # self.expert_args[i] = (
+                        #    option[0], option[1], option[2], widget.get_active(), option[4])
+                        widget.destroy()
+                    elif isinstance(widget, gtk.SpinButton) and widget.get_name() == option[2]:
+                        self.expert_args[i] = (
+                            option[0], option[1], option[2], widget.get_value(), option[4])
+                        widget.destroy()
+                    elif isinstance(widget, gtk.Entry) and widget.get_name() == option[2]:
+                        self.expert_args[i] = (
+                            option[0], option[1], option[2], widget.get_text())
+                        # update the value of the expert_args
+
+                        widget.destroy()
+            # resize the dialog to fit the new content just added
+            dialog.resize(1, 1)
+
+            dialog.show_all()
+
+        def _simple_mode(self, dialog):
+            simple_options = self.simple_args
+            _add_options(simple_options, dialog)
+
+            # Create a new GTK button to show/hide the advanced options
+            advanced_button = gtk.Button(label='Expand')
+            advanced_button.connect(
+                'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
+            dialog.vbox.pack_start(advanced_button, True, True, 0)
+
+            dialog.show_all()
+
+        # -----------------------------------------------------------------------
+
+        # Create a new GTK dialog
+        dialog = gtk.Dialog(title=self.name)
+        dialog.set_border_width(10)
+
+        simple_options = self.simple_args
+        _add_options(simple_options, dialog)
+
+        # Create a new GTK button to show/hide the advanced options
+        advanced_button = gtk.Button(label='Expand')
+        advanced_button.connect(
+            'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
+        dialog.vbox.pack_start(advanced_button, True, True, 0)
+
+        # Add the OK and Cancel buttons to the dialog
+        dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+
+        # Show the dialog
+        dialog.show_all()
+
+        # Run the dialog and get the response
+        response = dialog.run()
+        if response == gtk.RESPONSE_OK:
+            kwargs.update({
+                "image": image,
+                "drawable": drawable,
+                "prompt": prompt_entry.get_text()})
+        ##request_data['sampler_index'] = sampler_index.get_active()
+        #request_data['restore_faces'] = restore_faces.get_active()
+        #request_data['cfg_scale'] = cfg_scale.get_value()
+        #request_data['num_images'] = num_images.get_value()
+        ##request_data['img_target'] = img_target.get_active()
+        #request_data['negative_prompt'] = negative_prompt.get_text()
+        #request_data['seed'] = seed.get_text()
+        ##request_data['text'] = text
+
+        dialog.destroy()
+
+        # call the run_command function
+        self.command_runner(self(**kwargs))
+        #self.run_command(self, image, drawable, request_data)
+
+        # return request_data
+
+    # -----------------------------------------------------------------------
 
 
 class StableDiffusionCommand(StableBoyCommand):
@@ -101,7 +259,6 @@ class StableDiffusionCommand(StableBoyCommand):
             self.error_msg = str(e)
             self.status = 'ERROR'
 
-
     def run(self):
         self.status = 'RUNNING'
 
@@ -115,12 +272,12 @@ class StableDiffusionCommand(StableBoyCommand):
 
             # create the request
             self.sd_request = Request(url=self.url,
-                                 headers={'Content-Type': 'application/json'},
-                                 data=json.dumps(self.req_data))  # request data
-            
+                                      headers={
+                                          'Content-Type': 'application/json'},
+                                      data=json.dumps(self.req_data))  # request data
 
             # start it in a parallel thread
-            thread=threading.Thread(target=self.start_request)
+            thread = threading.Thread(target=self.start_request)
             thread.start()
             thread.join()
 
@@ -128,8 +285,8 @@ class StableDiffusionCommand(StableBoyCommand):
             if self.status == 'ERROR':
                 print("ERROR while conducting the request:")
                 print(self.error_msg)
-                gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL, 
-                "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
+                gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL,
+                                  "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
 
             else:
                 if self.sd_resp:
@@ -137,7 +294,8 @@ class StableDiffusionCommand(StableBoyCommand):
                         self.sd_resp.read())  # read response
                     if config.LOG_REQUESTS:
                         # create temporary response file
-                        resp_path = tempfile.mktemp(prefix='resp_', suffix='.json')
+                        resp_path = tempfile.mktemp(
+                            prefix='resp_', suffix='.json')
                         with open(resp_path, 'w') as resp_file:  # write response to file
                             print('response: ' + resp_path)
                             resp_file.write(json.dumps(self.response))
@@ -215,5 +373,7 @@ class StableDiffusionCommand(StableBoyCommand):
 
         for layer_name in layers_names:
             #layer = pdb.gimp_image_get_layer_by_name(self.img, layer_name)
-            pdb.gimp_layer_translate(pdb.gimp_image_get_layer_by_name(self.img, layer_name), -translate_x, -translate_y)
-            pdb.gimp_layer_resize_to_image_size(pdb.gimp_image_get_layer_by_name(self.img, layer_name))
+            pdb.gimp_layer_translate(pdb.gimp_image_get_layer_by_name(
+                self.img, layer_name), -translate_x, -translate_y)
+            pdb.gimp_layer_resize_to_image_size(
+                pdb.gimp_image_get_layer_by_name(self.img, layer_name))
