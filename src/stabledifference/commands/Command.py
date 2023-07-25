@@ -37,9 +37,11 @@ from collections import namedtuple
 from stabledifference.command_runner import config
 import stabledifference as sdiff
 from stabledifference.constants import PREFERENCES_SHELF_GROUP as PREFS
+from stabledifference.constants import COLOR_SCHEME as COLORS
 import gimpfu
 import threading
 import gtk
+from gimpfu import *
 
 
 class StableBoyCommand(Thread):
@@ -84,12 +86,18 @@ class StableBoyCommand(Thread):
                 button.set_label('Expand')
                 _remove_advanced_options(self, dialog)
 
+
         def _add_options(options, dialog):
             for option in options:
 
                 if option[0] == "STRING":
                     new_label = gtk.Label(option[2])
                     new_entry = gtk.Entry()
+
+                    new_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    new_entry.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    new_entry.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+
                     new_entry.set_name(option[1])
                     new_entry.set_text(option[3])
                     dialog.vbox.pack_start(new_label, True, True, 0)
@@ -98,6 +106,13 @@ class StableBoyCommand(Thread):
                 elif option[0] == "SLIDER":
                     new_label = gtk.Label(option[2])
                     new_slider = gtk.HScale()
+
+                    new_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    new_slider.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    new_slider.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+                    new_slider.modify_cursor(gtk.gdk.color_parse(COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+
+
                     new_slider.set_name(option[1])
                     new_slider.set_range(option[4][0], option[4][1])
                     new_slider.set_increments(option[4][2], option[4][2])
@@ -106,11 +121,22 @@ class StableBoyCommand(Thread):
                     dialog.vbox.pack_start(new_slider, True, True, 0)
 
                 # TODO fix OptionMenu
-                # elif option[0] == "OPTION":
+                #elif option[0] == "OPTION":
                 #    new_label = gtk.Label(option[2])
-                #    new_option = gtk.OptionMenu()
-                #    new_option.set_menu(option[4])
-                #    new_option.set_history(option[3])
+                #    new_option = gtk.Menu()
+                #    new_option.set_name(option[1])
+                #
+                #    dropdown_options = option[4]
+                #    for label in dropdown_options:
+                #        #menu_item = gtk.Menu()
+                #        #menu_item.set_title(label)
+                #        #new_option.set_menu(menu_item)
+                #        new_option.append(gtk.Label(label))
+                #
+                #
+                #
+                #    #new_option.set_menu(option[4])
+                #    new_option.set_active(option[3])
                 #    dialog.vbox.pack_start(new_label, True, True, 0)
                 #    dialog.vbox.pack_start(new_option, True, True, 0)
 
@@ -154,6 +180,9 @@ class StableBoyCommand(Thread):
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_value(), option[4])
                         widget.destroy()
+                    elif isinstance(widget, gtk.OptionMenu) and widget.get_name() == option[1]:
+                        #TODO save prefs
+                        widget.destroy()
                     elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_text())
@@ -179,10 +208,18 @@ class StableBoyCommand(Thread):
             return kwargs
 
         # -----------------------------------------------------------------------
-
+        #gtk.settings_get_default().set_string_property('gtk-theme-name', 'Dark', '')
         # Create a new GTK dialog
         dialog = gtk.Dialog(title=self.name)
         dialog.set_border_width(10)
+        dialog.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["background"]))
+        dialog.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+        dialog.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+        dialog.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+        dialog.modify_cursor(gtk.gdk.color_parse(COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+
+        #style_provider = gtk.CssProvider()
+        #style_provider.load_from_path("style.css")
 
         simple_options = self.simple_args
         _add_options(simple_options, dialog)

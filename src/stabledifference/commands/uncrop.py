@@ -28,7 +28,7 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         ("SLIDER", "padding_right", "Padding right", 128, (0, 256, 1)),
         ("SLIDER", "padding_top", "Padding top", 128, (0, 256, 1)),
         ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 1)),
-        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 25)),
+        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1)),
     ]
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),

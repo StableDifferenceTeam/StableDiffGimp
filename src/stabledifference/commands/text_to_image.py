@@ -30,5 +30,5 @@ class TextToImageCommand(StableDiffusionCommand):
         ("BOOL", 'restore_faces', 'Restore faces', False),
         ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5)),
         ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
-        #("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
+        ("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
     ]
