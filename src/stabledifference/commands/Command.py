@@ -90,7 +90,7 @@ class StableBoyCommand(Thread):
                 if option[0] == "STRING":
                     new_label = gtk.Label(option[2])
                     new_entry = gtk.Entry()
-                    new_entry.set_name(option[2])
+                    new_entry.set_name(option[1])
                     new_entry.set_text(option[3])
                     dialog.vbox.pack_start(new_label, True, True, 0)
                     dialog.vbox.pack_start(new_entry, True, True, 0)
@@ -98,7 +98,7 @@ class StableBoyCommand(Thread):
                 elif option[0] == "SLIDER":
                     new_label = gtk.Label(option[2])
                     new_slider = gtk.HScale()
-                    new_slider.set_name(option[2])
+                    new_slider.set_name(option[1])
                     new_slider.set_range(option[4][0], option[4][1])
                     new_slider.set_increments(option[4][2], option[4][2])
                     new_slider.set_value(option[3])
@@ -117,6 +117,7 @@ class StableBoyCommand(Thread):
                 elif option[0] == "BOOL":
                     new_bool = gtk.CheckButton()
                     new_bool.set_label(option[2])
+                    new_bool.set_name(option[1])
                     new_bool.set_active(option[3])
                     dialog.vbox.pack_start(new_label, True, True, 0)
                     dialog.vbox.pack_start(new_bool, True, True, 0)
@@ -124,7 +125,7 @@ class StableBoyCommand(Thread):
                 elif option[0] == "SPIN_BTN":
                     new_label = gtk.Label(option[2])
                     new_spinbtn = gtk.SpinButton()
-                    new_spinbtn.set_name(option[2])
+                    new_spinbtn.set_name(option[1])
                     new_spinbtn.set_range(option[4][0], option[4][1])
                     new_spinbtn.set_increments(option[4][2], option[4][2])
                     new_spinbtn.set_value(option[3])
@@ -133,6 +134,7 @@ class StableBoyCommand(Thread):
 
             dialog.show_all()
 
+        # removes the advanced options from the dialog, and saves the values of the options temporarily
         def _remove_advanced_options(self, dialog):
             expert_options = self.expert_args
             for i in range(len(expert_options)):
@@ -140,20 +142,19 @@ class StableBoyCommand(Thread):
                 for widget in dialog.vbox.get_children():
                     if isinstance(widget, gtk.Label) and widget.get_text() == option[2]:
                         widget.destroy()
-                    elif isinstance(widget, gtk.HScale) and widget.get_name() == option[2]:
+                    elif isinstance(widget, gtk.HScale) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_value(), option[4])
                         widget.destroy()
-                    elif isinstance(widget, gtk.CheckButton) and widget.get_label() == option[2]:
-                        # TODO fix
-                        # self.expert_args[i] = (
-                        #    option[0], option[1], option[2], widget.get_active(), option[4])
+                    elif isinstance(widget, gtk.CheckButton) and widget.get_name() == option[1]:
+                        self.expert_args[i] = (
+                            option[0], option[1], option[2], widget.get_active())
                         widget.destroy()
-                    elif isinstance(widget, gtk.SpinButton) and widget.get_name() == option[2]:
+                    elif isinstance(widget, gtk.SpinButton) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_value(), option[4])
                         widget.destroy()
-                    elif isinstance(widget, gtk.Entry) and widget.get_name() == option[2]:
+                    elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_text())
                         # update the value of the expert_args
@@ -164,17 +165,18 @@ class StableBoyCommand(Thread):
 
             dialog.show_all()
 
-        def _simple_mode(self, dialog):
-            simple_options = self.simple_args
-            _add_options(simple_options, dialog)
-
-            # Create a new GTK button to show/hide the advanced options
-            advanced_button = gtk.Button(label='Expand')
-            advanced_button.connect(
-                'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
-            dialog.vbox.pack_start(advanced_button, True, True, 0)
-
-            dialog.show_all()
+        def get_kwargs(dialog):
+            kwargs = {}
+            for widget in dialog.vbox.get_children():
+                if isinstance(widget, gtk.HScale):
+                    kwargs.update({widget.get_name(): widget.get_value()})
+                elif isinstance(widget, gtk.CheckButton):
+                    kwargs.update({widget.get_label(): widget.get_active()})
+                elif isinstance(widget, gtk.SpinButton):
+                    kwargs.update({widget.get_name(): widget.get_value()})
+                elif isinstance(widget, gtk.Entry):
+                    kwargs.update({widget.get_name(): widget.get_text()})
+            return kwargs
 
         # -----------------------------------------------------------------------
 
@@ -201,19 +203,8 @@ class StableBoyCommand(Thread):
         # Run the dialog and get the response
         response = dialog.run()
         if response == gtk.RESPONSE_OK:
-            kwargs.update({
-                "image": image,
-                "drawable": drawable,
-                "prompt": prompt_entry.get_text()})
-        ##request_data['sampler_index'] = sampler_index.get_active()
-        #request_data['restore_faces'] = restore_faces.get_active()
-        #request_data['cfg_scale'] = cfg_scale.get_value()
-        #request_data['num_images'] = num_images.get_value()
-        ##request_data['img_target'] = img_target.get_active()
-        #request_data['negative_prompt'] = negative_prompt.get_text()
-        #request_data['seed'] = seed.get_text()
-        ##request_data['text'] = text
-
+            kwargs.update({'image': image, 'drawable': drawable})
+            kwargs.update(get_kwargs(dialog))
         dialog.destroy()
 
         # call the run_command function
@@ -331,7 +322,7 @@ class StableDiffusionCommand(StableBoyCommand):
         return {
             'prompt': kwargs.get('prompt', ''),
             'negative_prompt': kwargs.get('negative_prompt', ''),
-            'steps': kwargs.get('steps', 25),
+            'steps': int(kwargs.get('steps', 25)),
             'sampler_index': sdiff.constants.SAMPLERS[kwargs.get('sampler_index', 0)],
             'batch_size': int(kwargs.get('num_images', 1)),
             'cfg_scale': kwargs.get('cfg_scale', 7.5),

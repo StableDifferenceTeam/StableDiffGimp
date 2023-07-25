@@ -5,35 +5,49 @@ from image_to_image import ImageToImageCommand
 import gimpfu
 
 
-class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
+class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
     uri = "sdapi/v1/img2img"
     metadata = StableDiffusionCommand.CommandMetadata(
-        "SimpleUncropToImageCommand",
-        "StableDifference " + sdiff.__version__ + ": Uncrop - Simple mode",
+        "SimpleUncropCommand",
+        "StableDifference " + sdiff.__version__ + ": Uncrop",
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
         "StableDifference",
         "2023",
-        "<Image>/StableDifference/Uncrop/Simple mode",  # menu path
-        "*", [
-            (gimpfu.PF_STRING, "prompt", "Prompt", "", ""),
-            (gimpfu.PF_SLIDER, "padding_left", "Padding left", 128, (0, 256, 1)),
-            (gimpfu.PF_SLIDER, "padding_right", "Padding right", 128, (0, 256, 1)),
-            (gimpfu.PF_SLIDER, "padding_top", "Padding top", 128, (0, 256, 1)),
-            (gimpfu.PF_SLIDER, "padding_bottom",
-             "Padding bottom", 128, (0, 256, 1)),
-            (gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
-        ],
+        "<Image>/StableDifference/Uncrop",  # menu path
+        "*",
         [],
+        [],
+
+
     )
+    name = "Uncrop"
+    simple_args = [
+        ("STRING", "prompt", "Prompt", ""),
+        ("SLIDER", "padding_left", "Padding left", 128, (0, 256, 1)),
+        ("SLIDER", "padding_right", "Padding right", 128, (0, 256, 1)),
+        ("SLIDER", "padding_top", "Padding top", 128, (0, 256, 1)),
+        ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 1)),
+        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 25)),
+    ]
+    expert_args = [
+        ("STRING", "negative_prompt", "Negative Prompt", ""),
+        ("STRING", 'seed', 'Seed', '-1'),
+        ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
+        ("BOOL", 'restore_faces', 'Restore faces', False),
+        ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5)),
+        ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
+        #("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
+    ]
 
     def __init__(self, **kwargs):
         ImageToImageCommand.__init__(self, **kwargs)
-        self.padding_left = kwargs.get('padding_left', 128)
-        self.padding_right = kwargs.get('padding_right', 128)
-        self.padding_top = kwargs.get('padding_top', 128)
-        self.padding_bottom = kwargs.get('padding_bottom', 128)
-        padding_max = max(self.padding_left, self.padding_right, self.padding_top, self.padding_bottom)
+        self.padding_left = int(kwargs.get('padding_left', 128))
+        self.padding_right = int(kwargs.get('padding_right', 128))
+        self.padding_top = int(kwargs.get('padding_top', 128))
+        self.padding_bottom = int(kwargs.get('padding_bottom', 128))
+        padding_max = max(self.padding_left, self.padding_right,
+                          self.padding_top, self.padding_bottom)
         if padding_max > 128:
             self.padding = 256
         else:
@@ -84,7 +98,7 @@ class Uncrop(ImageToImageCommand):  # change to stablediffusioncommand
 
         return request_data
 
-    #def _post_process(self):
+    # def _post_process(self):
     #  print(str(self.padding_left) + " : " + str(self.padding_top))
     #  for layer in self.layers:
     #      layer.gimp_layer_translate(layer, -50, -50)

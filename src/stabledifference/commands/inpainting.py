@@ -14,30 +14,33 @@ class InpaintingCommand(ImageToImageCommand):
         "StableDifference",
         "StableDifference",
         "2023",
-        "<Image>/StableDifference/Inpainting/Expert mode",  # menu path
-        "*", [
-            (gimpfu.PF_STRING, 'prompt', 'Prompt', ''),
-            (gimpfu.PF_SLIDER, 'steps', 'Steps', 25, (1, 150, 25)),
-            (gimpfu.PF_OPTION, 'sampler_index',
-             'Sampler', 0, sdiff.constants.SAMPLERS),
-            (gimpfu.PF_SLIDER, 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5)),
-            (gimpfu.PF_SLIDER, 'denoising_strength',
-             'Denoising strength %', 75.0, (0, 100, 1)),
-            (gimpfu.PF_BOOL, 'autofit_inpainting',
-             'Autofit inpainting region', True),
-            (gimpfu.PF_SLIDER, 'mask_blur', 'Mask blur', 4, (0, 32, 1)),
-            (gimpfu.PF_OPTION, 'inpainting_fill', 'Inpainting fill',
-             3, sdiff.constants.INPAINTING_FILL_MODE),
-            (gimpfu.PF_BOOL, 'inpaint_full_res',
-             'Inpaint at full resolution', True),
-            (gimpfu.PF_INT, 'inpaint_full_res_padding',
-             'Full res. inpainting padding', 0),
-            (gimpfu.PF_OPTION, 'img_target', 'Results as',
-             0, sdiff.constants.IMAGE_TARGETS),
-            (gimpfu.PF_BOOL, 'apply_inpainting_mask', 'Apply inpainting mask', True),
-        ],
+        "<Image>/StableDifference/Inpainting",  # menu path
+        "*",
+        [],
         [],
     )
+    name = "Inpainting"
+    simple_args = [
+        ("STRING", "prompt", "Prompt", ""),
+        ("SLIDER", "denoising_strength", "Denoising strength %", 75.0, (0, 100, 1)),
+        ("SLIDER", "steps", "Steps", 25, (1, 150, 25)),
+    ]
+    expert_args = [
+        ("STRING", "negative_prompt", "Negative Prompt", ""),
+        ("STRING", 'seed', 'Seed', '-1'),
+        #("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
+        ("BOOL", 'restore_faces', 'Restore faces', False),
+        ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5)),
+        ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
+        #("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
+        #("OPTION", 'inpainting_fill', 'Inpainting fill', 3, sdiff.constants.INPAINTING_FILL_MODE),
+        ("BOOL", 'inpaint_full_res', 'Inpaint at full resolution', True),
+        ("SLIDER", 'inpaint_full_res_padding',
+            'Full res. inpainting padding', 0, (0, 128, 1)),
+        ("BOOL", 'autofit_inpainting', 'Autofit inpainting region', True),
+        ("SLIDER", 'mask_blur', 'Mask blur', 4, (0, 32, 1)),
+        ("BOOL", 'apply_inpainting_mask', 'Apply inpainting mask', True),
+    ]
 
     def __init__(self, **kwargs):
 
