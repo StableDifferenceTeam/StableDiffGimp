@@ -8,7 +8,7 @@ from importlib import import_module
 import inspect
 import ssl
 import json
-from gimpshelf import shelf
+#from gimpshelf import shelf
 
 # Fix relative imports in Windows
 path = os.path.dirname(os.path.abspath(__file__))
@@ -115,17 +115,21 @@ if __name__ == "__main__":
 
     error =  False
     try:
-        settingsFile = json.load(open("settings.json", "a")) # load settings file in write mode or create it if it does not exist
-    except:
+        with open("settings.json") as f:
+            print("What the dawg doing") 
+            settingsFile = json.load(f) # load settings file in write mode or create it if it does not exist
+            print("babada booie")
+    except Exception as e: 
         print("There was an error opening the settings file.") # make sure there are no unexpected problems 
+        print(e)
         error = True
     if not error:
-        if len(settingsFile == 0): # if the file is newly created -> json.load will produce a dictionary but it will be empty so we initiate it with our default values
+        if len(settingsFile) == 0: # if the file is newly created -> json.load will produce a dictionary but it will be empty so we initiate it with our default values
             settingsFile.update({"expert_mode": False}) # expert mode is initiated with false
             settingsFile.update({"api_base_url": sdiff.constants.DEFAULT_API_URL}) # api base url is initiated with the one specified in constants
-            json.dump(settingsFile)
-        shelf['expert_mode'] = settingsFile['expert_mode']
-        shelf['api_base_url'] = settingsFile['api_base_url']
+            json.dump(settingsFile, f)
+        #shelf['expert_mode'] = settingsFile['expert_mode']
+        #shelf['api_base_url'] = settingsFile['api_base_url']
 
     gimpfu.main()
 
