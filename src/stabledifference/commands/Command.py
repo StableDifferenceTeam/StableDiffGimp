@@ -86,62 +86,73 @@ class StableBoyCommand(Thread):
                 button.set_label('Expand')
                 _remove_advanced_options(self, dialog)
 
-
         def _add_options(options, dialog):
             for option in options:
 
                 if option[0] == "STRING":
                     new_label = gtk.Label(option[2])
                     new_entry = gtk.Entry()
-
-                    new_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    new_entry.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    new_entry.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-
                     new_entry.set_name(option[1])
                     new_entry.set_text(option[3])
+
+                    # new_label.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_entry.modify_base(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    # new_entry.modify_text(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+
                     dialog.vbox.pack_start(new_label, True, True, 0)
                     dialog.vbox.pack_start(new_entry, True, True, 0)
 
                 elif option[0] == "SLIDER":
                     new_label = gtk.Label(option[2])
                     new_slider = gtk.HScale()
-
-                    new_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    new_slider.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    new_slider.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-                    new_slider.modify_cursor(gtk.gdk.color_parse(COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
-
-
                     new_slider.set_name(option[1])
                     new_slider.set_range(option[4][0], option[4][1])
                     new_slider.set_increments(option[4][2], option[4][2])
+                    new_slider.set_digits(option[4][3])
                     new_slider.set_value(option[3])
+
+                    # new_label.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_slider.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_slider.modify_base(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    # new_slider.modify_text(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+                    # new_slider.modify_cursor(gtk.gdk.color_parse(
+                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+
                     dialog.vbox.pack_start(new_label, True, True, 0)
                     dialog.vbox.pack_start(new_slider, True, True, 0)
 
-                # TODO fix OptionMenu
-                #elif option[0] == "OPTION":
-                #    new_label = gtk.Label(option[2])
-                #    new_option = gtk.Menu()
-                #    new_option.set_name(option[1])
-                #
-                #    dropdown_options = option[4]
-                #    for label in dropdown_options:
-                #        #menu_item = gtk.Menu()
-                #        #menu_item.set_title(label)
-                #        #new_option.set_menu(menu_item)
-                #        new_option.append(gtk.Label(label))
-                #
-                #
-                #
-                #    #new_option.set_menu(option[4])
-                #    new_option.set_active(option[3])
-                #    dialog.vbox.pack_start(new_label, True, True, 0)
-                #    dialog.vbox.pack_start(new_option, True, True, 0)
+                elif option[0] == "OPTION":
+                    new_label = gtk.Label(option[2])
+                    new_option = gtk.combo_box_new_text()
+                    for label in option[4]:
+                        new_option.append_text(label)
+                    new_option.set_active(option[3])
+                    new_option.set_name(option[1])
+
+                    # new_label.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_option.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_option.modify_base(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    # new_option.modify_text(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+                    # new_option.modify_cursor(gtk.gdk.color_parse(
+                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+
+                    dialog.vbox.pack_start(new_label, True, True, 0)
+                    dialog.vbox.pack_start(new_option, True, True, 0)
 
                 elif option[0] == "BOOL":
                     new_bool = gtk.CheckButton()
+
                     new_bool.set_label(option[2])
                     new_bool.set_name(option[1])
                     new_bool.set_active(option[3])
@@ -151,6 +162,16 @@ class StableBoyCommand(Thread):
                 elif option[0] == "SPIN_BTN":
                     new_label = gtk.Label(option[2])
                     new_spinbtn = gtk.SpinButton()
+
+                    # new_label.modify_fg(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
+                    # new_spinbtn.modify_base(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
+                    # new_spinbtn.modify_text(
+                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
+                    # new_spinbtn.modify_cursor(gtk.gdk.color_parse(
+                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+
                     new_spinbtn.set_name(option[1])
                     new_spinbtn.set_range(option[4][0], option[4][1])
                     new_spinbtn.set_increments(option[4][2], option[4][2])
@@ -180,8 +201,8 @@ class StableBoyCommand(Thread):
                         self.expert_args[i] = (
                             option[0], option[1], option[2], widget.get_value(), option[4])
                         widget.destroy()
-                    elif isinstance(widget, gtk.OptionMenu) and widget.get_name() == option[1]:
-                        #TODO save prefs
+                    elif isinstance(widget, gtk.ComboBox) and widget.get_name() == option[1]:
+                       # TODO save prefs
                         widget.destroy()
                     elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
@@ -212,23 +233,21 @@ class StableBoyCommand(Thread):
         # Create a new GTK dialog
         dialog = gtk.Dialog(title=self.name)
         dialog.set_border_width(10)
-        dialog.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["background"]))
-        dialog.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-        dialog.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-        dialog.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-        dialog.modify_cursor(gtk.gdk.color_parse(COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
+        # dialog.modify_bg(gtk.STATE_NORMAL,
+        #                 gtk.gdk.color_parse(COLORS["background"]))
 
         #style_provider = gtk.CssProvider()
-        #style_provider.load_from_path("style.css")
+        # style_provider.load_from_path("style.css")
 
         simple_options = self.simple_args
         _add_options(simple_options, dialog)
 
         # Create a new GTK button to show/hide the advanced options
-        advanced_button = gtk.Button(label='Expand')
-        advanced_button.connect(
-            'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
-        dialog.vbox.pack_start(advanced_button, True, True, 0)
+        if self.expert_args:
+            advanced_button = gtk.Button(label='Expand')
+            advanced_button.connect(
+                'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
+            dialog.vbox.pack_start(advanced_button, True, True, 0)
 
         # Add the OK and Cancel buttons to the dialog
         dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)

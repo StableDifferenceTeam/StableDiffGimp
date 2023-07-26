@@ -1,4 +1,4 @@
-DEFAULT_API_URL = 'https://1e7ec5df2833a08da7.gradio.live'
+DEFAULT_API_URL = 'http://127.0.0.1:7860'
 
 MASK_LAYER_NAME = 'Inpainting Mask'
 
@@ -26,10 +26,10 @@ SCRIPT_XY_PLOT_AXIS_OPTIONS = [
 PREFERENCES_SHELF_GROUP = 'stable_boy_preferences'
 
 COLOR_SCHEME = {
-    "primary" : "#bb86fc",
-    "foreground" : "#ffffff",
-    "on_mid" : "#b3b3b3",
-    "mid" : "#505050",
-    "background" : "#2c2c2c"
+    "primary": "#bb86fc",
+    "foreground": "#ffffff",
+    "on_mid": "#b3b3b3",
+    "mid": "#505050",
+    "background": "#2c2c2c"
 
 }

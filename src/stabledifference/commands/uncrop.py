@@ -24,20 +24,20 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
     name = "Uncrop"
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
-        ("SLIDER", "padding_left", "Padding left", 128, (0, 256, 1)),
-        ("SLIDER", "padding_right", "Padding right", 128, (0, 256, 1)),
-        ("SLIDER", "padding_top", "Padding top", 128, (0, 256, 1)),
-        ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 1)),
-        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1)),
+        ("SLIDER", "padding_left", "Padding left", 128, (0, 256, 8, 0)),
+        ("SLIDER", "padding_right", "Padding right", 128, (0, 256, 8, 0)),
+        ("SLIDER", "padding_top", "Padding top", 128, (0, 256, 8, 0)),
+        ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 8, 0)),
+        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
         ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
         ("BOOL", 'restore_faces', 'Restore faces', False),
-        ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5)),
+        ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5, 1)),
         ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
-        #("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
+        ("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
     ]
 
     def __init__(self, **kwargs):
