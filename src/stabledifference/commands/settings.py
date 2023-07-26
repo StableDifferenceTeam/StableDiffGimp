@@ -25,7 +25,7 @@ class SettingsCommand(StableBoyCommand):
     )
 
     def __init__(self, **kwargs):
-
+        StableBoyCommand.__init__(self, **kwargs)
         # save settings in db using shelf (shelf works using a key defined here to save information until gimp is shutdown.)
         #shelf['expert_mode'] = [kwargs['expert_mode']]
         #shelf['api_base_url'] = [kwargs['api_base_url']]
