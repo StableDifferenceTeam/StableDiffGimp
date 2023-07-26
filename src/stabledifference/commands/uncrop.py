@@ -1,6 +1,5 @@
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
-from Command import StableBoyCommand
 from image_to_image import ImageToImageCommand
 import gimpfu
 

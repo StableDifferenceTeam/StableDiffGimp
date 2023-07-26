@@ -44,7 +44,7 @@ import gtk
 from gimpfu import *
 
 
-class StableBoyCommand(Thread):
+class StableDifferenceCommand(Thread):
     LayerResult = namedtuple('LayerResult', 'name img children')
     # CommandMetadata is just the names of the parameters of the command
     CommandMetadata = namedtuple(
@@ -272,11 +272,11 @@ class StableBoyCommand(Thread):
     # -----------------------------------------------------------------------
 
 
-class StableDiffusionCommand(StableBoyCommand):
+class StableDiffusionCommand(StableDifferenceCommand):
     uri = ''
 
     def __init__(self, **kwargs):
-        StableBoyCommand.__init__(self, **kwargs)
+        StableDifferenceCommand.__init__(self, **kwargs)
         self.url = urljoin(sdiff.gimp.pref_value(
             PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL TODO shelf url aus settings?
         self.img = kwargs['image']  # image to be processed

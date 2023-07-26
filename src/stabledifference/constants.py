@@ -23,7 +23,7 @@ SCRIPT_XY_PLOT_AXIS_OPTIONS = [
     "Clip skip", "Denoising", "Cond. Image Mask Weight"
 ]
 
-PREFERENCES_SHELF_GROUP = 'stable_boy_preferences'
+PREFERENCES_SHELF_GROUP = 'stable_difference_preferences'
 
 COLOR_SCHEME = {
     "primary": "#bb86fc",

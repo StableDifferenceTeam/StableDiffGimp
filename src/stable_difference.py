@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
     # def is_cmd() simple function to check if we are in cmd or not (just precaution)
     def is_cmd(obj):
-        return inspect.isclass(obj) and obj.__name__ not in ['StableBoyCommand', 'StableDiffusionCommand'] \
-            and 'StableBoyCommand' in [cls.__name__ for cls in inspect.getmro(obj)]
+        return inspect.isclass(obj) and obj.__name__ not in ['StableDifferenceCommand', 'StableDiffusionCommand'] \
+            and 'StableDifferenceCommand' in [cls.__name__ for cls in inspect.getmro(obj)]
 
     # get all files from folder .stabledifference\commands into cmd_module_locations[]
     cmd_module_locations = [["stabledifference", "commands"]]
