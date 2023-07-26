@@ -6,7 +6,7 @@ from Command import StableDiffusionCommand
 
 
 class SettingsCommand(StableDiffusionCommand):
-    uri = "sdapi/v1/inpainting"
+    uri = "sdapi/v1/settings"
     metadata = StableDiffusionCommand.CommandMetadata( # proc_name, blurb, help, author, copyright, date, label, imagetypes, params, results
         "SettingsCommand", # proc_name
         "Not Stable Boy " + sdiff.__version__ + "- Settings", # blurb
@@ -25,6 +25,6 @@ class SettingsCommand(StableDiffusionCommand):
     )
 
     def __init__(self, **kwargs):
-        # save settings in db using shelf (shelf works using a key defined here to save information until gimp is shutdown. (Problems may arise if these are not initiated TODO))
+        # save settings in db using shelf (shelf works using a key defined here to save information until gimp is shutdown.)
         shelf['expert_mode'] = [kwargs['expert_mode']]
         shelf['api_base_url'] = [kwargs['api_base_url']]
