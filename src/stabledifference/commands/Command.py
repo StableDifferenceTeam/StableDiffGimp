@@ -42,6 +42,7 @@ import gimpfu
 import threading
 import gtk
 from gimpfu import *
+import time
 
 
 class StableDifferenceCommand(Thread):
@@ -232,6 +233,8 @@ class StableDifferenceCommand(Thread):
         #gtk.settings_get_default().set_string_property('gtk-theme-name', 'Dark', '')
         # Create a new GTK dialog
         dialog = gtk.Dialog(title=self.name)
+        dialog.present()
+
         dialog.set_border_width(10)
         # dialog.modify_bg(gtk.STATE_NORMAL,
         #                 gtk.gdk.color_parse(COLORS["background"]))
@@ -253,6 +256,12 @@ class StableDifferenceCommand(Thread):
         dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 
+        #progress_bar = gtk.ProgressBar()
+        #progress_bar.set_fraction(0.0)
+        #progress_bar.set_text("Processing...")
+        #progress_bar.set_pulse_step(0.01)
+        #dialog.vbox.pack_end(progress_bar, True, True, 0)
+
         # Show the dialog
         dialog.show_all()
 
@@ -261,13 +270,14 @@ class StableDifferenceCommand(Thread):
         if response == gtk.RESPONSE_OK:
             kwargs.update({'image': image, 'drawable': drawable})
             kwargs.update(get_kwargs(dialog))
+        
         dialog.destroy()
 
         # call the run_command function
         self.command_runner(self(**kwargs))
         #self.run_command(self, image, drawable, request_data)
 
-        # return request_data
+        #dialog.destroy()
 
     # -----------------------------------------------------------------------
 

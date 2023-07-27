@@ -20,6 +20,8 @@ import gtk
 from gimpfu import *
 import gimp_functions
 from .config import Config as config
+from time import time, sleep
+import random
 
 # Basic Command runner, no progress updates
 
@@ -32,11 +34,63 @@ def run_command(cmd):
 
 def run_stable_diffusion_command(cmd):
     try:
-        cmd.start()
-        # TODO add some progress updates here (aesthetics)
+        # open a new message dialog to show the progress bar
+        dialog = gtk.Dialog(" ")
+        dialog.set_position(gtk.WIN_POS_CENTER)
+        dialog.set_size_request(500, 50)
+        dialog.set_resizable(False)
+        dialog.set_modal(True)
 
+        # create a progress bar
+        progressbar = gtk.ProgressBar()
+        progressbar.set_fraction(0.0)
+        progressbar.set_pulse_step(0.1)
+        progressbar.set_text("Processing...")
+
+        # add the progress bar to the dialog
+        dialog.vbox.pack_start(progressbar, True, True, 0)
+        progressbar.show()
+        dialog.show()
+
+        cmd.start()
+
+        i = 0
+        progress_texts = [
+            "AI is drawing...",
+            "Unpacking Creativity...",
+            "Igniting the AI's passion for painting...",
+            "Stabilizing the diffusion...",
+            "Constructing the masterpiece one pixel at a time...",
+            "Generating the next Van Gogh...",
+            "AI is taking a coffee break...",
+            "Inspiriation is flowing...",
+            "AI is thinking...",
+            "Adding perspective...",
+            "AI is painting...",
+            "Putting life into the painting...",
+            "Adding a sprinkle of magic to the artwork...",
+            "Adding a touch of color...",
+            "Adding the Background...",
+            "AI is dancing with the muse of creativity...",
+            "Cleaning digital brushes...",
+            "AI is getting into the flow...",
+            "Adding Love...",
+            "AI is doing its best..."
+        ]
         while cmd.status != "DONE":
-            pass  # gimp.progress_update(cmd.progress)
+            i += 1
+            if i % 30 == 0:
+                new_text = progress_texts[random.randint(
+                    0, len(progress_texts) - 1)]
+                progressbar.set_text(new_text)
+
+            # update the progress bar
+            progressbar.pulse()
+            # update the dialog
+            while gtk.events_pending():
+                gtk.main_iteration()
+            sleep(0.1)
+
         cmd.join()
         cmd.img.undo_group_start()
         apply_inpainting_mask = hasattr(
@@ -44,7 +98,7 @@ def run_stable_diffusion_command(cmd):
         layers_names = gimp_functions.create_layers(
             cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
         gimp_functions.open_images(cmd.images)
-        
+
         if layers_names != None:
             if cmd.uncrop:
                 cmd._rescale_uncrop(layers_names)
