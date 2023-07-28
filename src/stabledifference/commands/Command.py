@@ -293,6 +293,11 @@ class StableDiffusionCommand(StableDifferenceCommand):
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
 
+    if not os.path.isfile(path+'settings.json'):
+       print("settings.json does not exist")
+       with open(path + '/settings.json', 'w') as f:
+            json.dump({"api_base_url": sdiff.constants.DEFAULT_API_URL}, f)
+
     with open(path + '/settings.json', 'r') as f:
         settings =  json.load(f)
         api_url = settings['api_base_url']
