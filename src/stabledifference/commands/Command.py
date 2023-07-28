@@ -105,6 +105,9 @@ class StableDiffusionCommand(StableBoyCommand):
         self.status = 'RUNNING'
 
         try:
+            #pdb.gimp_message_set_handler(MESSAGE_BOX)
+            #pdb.gimp_message("An error occurred while calling the generative model:\n")
+            
             # prints out a request path
             if config.LOG_REQUESTS:
                 req_path = tempfile.mktemp(prefix='req_', suffix='.json')
@@ -119,16 +122,21 @@ class StableDiffusionCommand(StableBoyCommand):
             
 
             # start it in a parallel thread
-            thread=threading.Thread(target=self.start_request)
-            thread.start()
-            thread.join()
+            #thread=threading.Thread(target=self.start_request)
+            #thread.start()
+            #thread.join()
+            self.start_request()
 
             # if it failed for some reason
             if self.status == 'ERROR':
                 print("ERROR while conducting the request:")
                 print(self.error_msg)
-                gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL, 
-                "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
+                
+                #pdb.gimp_message_set_handler(MESSAGE_BOX)
+                #pdb.gimp_message("An error occurred while calling the generative model:\n"+str(self.error_msg))
+                
+                #gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL, 
+                #"An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
 
             else:
                 if self.sd_resp:

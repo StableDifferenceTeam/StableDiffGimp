@@ -39,7 +39,12 @@ def run_stable_diffusion_command(cmd):
         while cmd.status != "DONE" and cmd.status != "ERROR":
             pass
         if cmd.status == "ERROR":
-            pass
+                                      
+                          
+            pdb.gimp_message_set_handler(MESSAGE_BOX)
+            pdb.gimp_message("-----------------------------------------------------------------------------------\n"+
+                             "An error occurred while calling the generative model:\n"+
+                             "-----------------------------------------------------------------------------------\n"+str(cmd.error_msg))
         else:
             cmd.join()
             cmd.img.undo_group_start()
