@@ -78,7 +78,7 @@ def run_stable_diffusion_command(cmd):
             "Adding Love...",
             "AI is doing it's best (aren't we all?)..."
         ]
-        while cmd.status != "DONE":
+        while cmd.status != "DONE" and cmd.status != "ERROR":
             i += 1
             if i % 30 == 0:
                 new_text = progress_texts[random.randint(
@@ -91,20 +91,27 @@ def run_stable_diffusion_command(cmd):
             while gtk.events_pending():
                 gtk.main_iteration()
             sleep(0.1)
-
-        cmd.join()
-        cmd.img.undo_group_start()
-        apply_inpainting_mask = hasattr(
-            cmd, 'apply_inpainting_mask') and cmd.apply_inpainting_mask
-        layers_names = gimp_functions.create_layers(
-            cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
-        gimp_functions.open_images(cmd.images)
-
-        if layers_names != None:
-            if cmd.uncrop:
-                cmd._rescale_uncrop(layers_names)
-
-        cmd.img.undo_group_end()
+        if cmd.status == "ERROR":
+                                      
+                          
+            pdb.gimp_message_set_handler(MESSAGE_BOX)
+            pdb.gimp_message("-----------------------------------------------------------------------------------\n"+
+                             "An error occurred while calling the generative model:\n"+
+                             "-----------------------------------------------------------------------------------\n"+str(cmd.error_msg))
+        else:
+            cmd.join()
+            cmd.img.undo_group_start()
+            apply_inpainting_mask = hasattr(
+                cmd, 'apply_inpainting_mask') and cmd.apply_inpainting_mask
+            layers_names = gimp_functions.create_layers(
+                cmd.img, cmd.layers, cmd.x, cmd.y, apply_inpainting_mask)
+            gimp_functions.open_images(cmd.images)
+    
+            if layers_names != None:
+                if cmd.uncrop:
+                    cmd._rescale_uncrop(layers_names)
+    
+            cmd.img.undo_group_end()
 
     except Exception as e:
         print("Error: " + str(e))

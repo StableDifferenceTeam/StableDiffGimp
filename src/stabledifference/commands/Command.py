@@ -344,9 +344,10 @@ class StableDiffusionCommand(StableDifferenceCommand):
                                       data=json.dumps(self.req_data))  # request data
 
             # start it in a parallel thread
-            thread = threading.Thread(target=self.start_request)
-            thread.start()
-            thread.join()
+            #thread = threading.Thread(target=self.start_request)
+            #thread.start()
+            #thread.join()
+            self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
 
             # if it failed for some reason
             if self.status == 'ERROR':
