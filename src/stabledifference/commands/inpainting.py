@@ -35,7 +35,7 @@ class InpaintingCommand(ImageToImageCommand):
         ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
         ("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
         ("OPTION", 'inpainting_fill', 'Inpainting fill',
-         3, sdiff.constants.INPAINTING_FILL_MODE),
+         1, sdiff.constants.INPAINTING_FILL_MODE),
         ("BOOL", 'inpaint_full_res', 'Inpaint at full resolution', True),
         ("SLIDER", 'inpaint_full_res_padding',
             'Full res. inpainting padding', 0, (0, 128, 1, 0)),
@@ -54,7 +54,7 @@ class InpaintingCommand(ImageToImageCommand):
     def _make_request_data(self, **kwargs):
         req_data = ImageToImageCommand._make_request_data(self, **kwargs)
         req_data['inpainting_mask_invert'] = 1
-        req_data['inpainting_fill'] = kwargs.get('inpainting_fill', 3)
+        req_data['inpainting_fill'] = int(kwargs.get('inpainting_fill', 1))
         req_data['mask_blur'] = kwargs.get('mask_blur', 4)
         req_data['inpaint_full_res'] = kwargs.get('inpaint_full_res', True)
         req_data['inpaint_full_res_padding'] = kwargs.get(

@@ -203,7 +203,8 @@ class StableDifferenceCommand(Thread):
                             option[0], option[1], option[2], widget.get_value(), option[4])
                         widget.destroy()
                     elif isinstance(widget, gtk.ComboBox) and widget.get_name() == option[1]:
-                       # TODO save prefs
+                        self.expert_args[i] = (
+                            option[0], option[1], option[2], widget.get_active(), option[4])
                         widget.destroy()
                     elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
                         self.expert_args[i] = (
@@ -225,6 +226,8 @@ class StableDifferenceCommand(Thread):
                     kwargs.update({widget.get_label(): widget.get_active()})
                 elif isinstance(widget, gtk.SpinButton):
                     kwargs.update({widget.get_name(): widget.get_value()})
+                elif isinstance(widget, gtk.ComboBox):
+                    kwargs.update({widget.get_name(): widget.get_active()})
                 elif isinstance(widget, gtk.Entry):
                     kwargs.update({widget.get_name(): widget.get_text()})
             return kwargs
@@ -257,9 +260,9 @@ class StableDifferenceCommand(Thread):
         dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 
         #progress_bar = gtk.ProgressBar()
-        #progress_bar.set_fraction(0.0)
-        #progress_bar.set_text("Processing...")
-        #progress_bar.set_pulse_step(0.01)
+        # progress_bar.set_fraction(0.0)
+        # progress_bar.set_text("Processing...")
+        # progress_bar.set_pulse_step(0.01)
         #dialog.vbox.pack_end(progress_bar, True, True, 0)
 
         # Show the dialog
@@ -270,14 +273,14 @@ class StableDifferenceCommand(Thread):
         if response == gtk.RESPONSE_OK:
             kwargs.update({'image': image, 'drawable': drawable})
             kwargs.update(get_kwargs(dialog))
-        
+
         dialog.destroy()
 
         # call the run_command function
         self.command_runner(self(**kwargs))
         #self.run_command(self, image, drawable, request_data)
 
-        #dialog.destroy()
+        # dialog.destroy()
 
     # -----------------------------------------------------------------------
 

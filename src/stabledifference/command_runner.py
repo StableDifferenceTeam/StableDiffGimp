@@ -40,6 +40,7 @@ def run_stable_diffusion_command(cmd):
         dialog.set_size_request(500, 50)
         dialog.set_resizable(False)
         dialog.set_modal(True)
+        dialog.present()
 
         # create a progress bar
         progressbar = gtk.ProgressBar()
@@ -75,7 +76,7 @@ def run_stable_diffusion_command(cmd):
             "Cleaning digital brushes...",
             "AI is getting into the flow...",
             "Adding Love...",
-            "AI is doing its best..."
+            "AI is doing it's best (aren't we all?)..."
         ]
         while cmd.status != "DONE":
             i += 1
