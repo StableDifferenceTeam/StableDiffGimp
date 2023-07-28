@@ -1,4 +1,4 @@
-DEFAULT_API_URL = 'http://127.0.0.1:7860'
+DEFAULT_API_URL = 'https://1b4f357ab89163ff6b.gradio.live'
 
 MASK_LAYER_NAME = 'Inpainting Mask'
 

@@ -149,6 +149,7 @@ def create_layers(img, layers, x, y, apply_inpainting_mask=False):
 
     # creates parent and child layers (nested)
     def _create_nested_layers(parent_layer, layers, layers_names):
+        print("We use nested layers")
         for layer in layers:
             if layer.children:
                 gimp_layer_group = pdb.gimp_layer_group_new(img)
@@ -179,7 +180,11 @@ def create_layers(img, layers, x, y, apply_inpainting_mask=False):
         return layers_names
 
     # When no parent layer exists, get the mask layer to the top
-    layers_names = _create_nested_layers(parent_layer=None, layers=layers, layers_names=layers_names)
+
+    if type(layers) == list:
+        layers_names = _create_nested_layers(parent_layer=None, layers=layers, layers_names=layers_names)
+    else:
+        layers_names = _create_nested_layers(parent_layer=None, layers=[layers], layers_names=layers_names)
     pdb.gimp_selection_none(img)
     if inp_mask_layer:
         pdb.gimp_image_raise_item_to_top(img, inp_mask_layer)
