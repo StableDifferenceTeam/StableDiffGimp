@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     if not os.path.isfile('settings.json'):
        print("settings.json does not exist")
-       with open('settings.json', 'w') as f:
+       with open(os.path.dirname(path) + '/settings.json', 'w') as f:
             json.dump({"api_base_url": sdiff.constants.DEFAULT_API_URL}, f) 
 
     gimpfu.main()

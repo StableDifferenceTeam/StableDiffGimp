@@ -43,6 +43,7 @@ import threading
 import gtk
 from gimpfu import *
 import time
+import os
 
 
 class StableDifferenceCommand(Thread):
@@ -288,7 +289,11 @@ class StableDifferenceCommand(Thread):
 class StableDiffusionCommand(StableDifferenceCommand):
     uri = ''
     api_url = ''
-    with open('settings.json', 'r') as f:
+
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
+
+    with open(path + '/settings.json', 'r') as f:
         settings =  json.load(f)
         api_url = settings['api_base_url']
 

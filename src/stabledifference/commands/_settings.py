@@ -29,7 +29,9 @@ class SettingsCommand(StableDifferenceCommand):
     name = "Settings"
     old_url = sdiff.constants.DEFAULT_API_URL
 
-    with open('settings.json', 'r') as f:
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
+    with open(path + "/settings.json", 'r') as f:
        settings = json.load(f)
        old_url = settings['api_base_url']
 
@@ -40,6 +42,7 @@ class SettingsCommand(StableDifferenceCommand):
 
     def __init__(self, **kwargs):
         StableDifferenceCommand.__init__(self, **kwargs)
-
-        with open('settings.json', 'w') as f:
+        path = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
+        with open(path + "/settings.json", 'w') as f:
            json.dump({'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL)}, f)
