@@ -287,11 +287,18 @@ class StableDifferenceCommand(Thread):
 
 class StableDiffusionCommand(StableDifferenceCommand):
     uri = ''
+    api_url = ''
+    with open('settings.json', 'r') as f:
+        settings =  json.load(f)
+        api_url = settings['api_base_url']
 
     def __init__(self, **kwargs):
         StableDifferenceCommand.__init__(self, **kwargs)
-        self.url = urljoin(sdiff.gimp.pref_value(
-            PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL TODO shelf url aus settings?
+
+
+        self.url = urljoin(self.api_url, self.uri)
+        #self.url = urljoin(sdiff.gimp.pref_value(
+        #    PREFS, 'api_base_url', sdiff.constants.DEFAULT_API_URL), self.uri)  # api URL TODO shelf url aus settings?
         self.img = kwargs['image']  # image to be processed
         self.images = None  # images to be processed
         self.layers = None  # layers to be processed

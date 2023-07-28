@@ -29,31 +29,17 @@ class SettingsCommand(StableDifferenceCommand):
     name = "Settings"
     old_url = sdiff.constants.DEFAULT_API_URL
 
-    # if not os.path.isfile('settings.json'):
-    #    print("settings.json does not exist")
-    #    #os.makedirs(os.path.dirname('settings.json'), exist_ok=True)
-    #    with open('settings.json', 'x') as f:
-    #        pass
-    #    f.write('{"api_base_url": "' + old_url + '"}')
-    # with open('settings.json', 'r') as f:
-    #    settings = json.load(f)
-    #    old_url = settings['api_base_url']
+    with open('settings.json', 'r') as f:
+       settings = json.load(f)
+       old_url = settings['api_base_url']
 
     simple_args = [
         ("STRING", "api_base_url", "API base URL", old_url),
     ]
+    
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        StableDifferenceCommand.__init__(self, **kwargs)
 
-        # save settings in db using shelf (shelf works using a key defined here to save information until gimp is shutdown.)
-        #shelf['expert_mode'] = [kwargs['expert_mode']]
-        #shelf['api_base_url'] = [kwargs['api_base_url']]
-        print("fuck it we ball")
-        # open file settings.json and save 'api_base_url' as the new kwargs['api_base_url']
-
-        # with open('settings.json', 'r') as f:
-        #    settings = json.load(f)
-        #    settings['api_base_url'] = kwargs['api_base_url']
-        # with open('settings.json', 'w') as f:
-        #    json.dump(settings, f)
+        with open('settings.json', 'w') as f:
+           json.dump({'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL)}, f)
