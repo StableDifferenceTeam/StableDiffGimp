@@ -31,7 +31,7 @@ class SettingsCommand(StableDifferenceCommand):
 
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
-    with open(path + "/settings.json", 'r') as f:
+    with open(os.path.join(path, "settings.json"), 'r') as f:
        settings = json.load(f)
        old_url = settings['api_base_url']
 
@@ -44,5 +44,5 @@ class SettingsCommand(StableDifferenceCommand):
         StableDifferenceCommand.__init__(self, **kwargs)
         path = os.path.dirname(os.path.abspath(__file__))
         path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
-        with open(path + "/settings.json", 'w') as f:
+        with open(os.path.join(path, "settings.json"), 'w') as f:
            json.dump({'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL)}, f)
