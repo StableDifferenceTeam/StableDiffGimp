@@ -1,4 +1,3 @@
-# text-to-image command (simplified)
 import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
@@ -21,11 +20,11 @@ class TextToImageCommand(StableDiffusionCommand):
     name = "Text to Image"
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
+        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
-        ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
         ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
         ("BOOL", 'restore_faces', 'Restore faces', False),
         ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5, 1)),

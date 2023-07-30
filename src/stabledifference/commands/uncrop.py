@@ -41,12 +41,15 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
 
     def __init__(self, **kwargs):
         ImageToImageCommand.__init__(self, **kwargs)
+        # save the padding values for later use
         self.padding_left = int(kwargs.get('padding_left', 128))
         self.padding_right = int(kwargs.get('padding_right', 128))
         self.padding_top = int(kwargs.get('padding_top', 128))
         self.padding_bottom = int(kwargs.get('padding_bottom', 128))
         padding_max = max(self.padding_left, self.padding_right,
                           self.padding_top, self.padding_bottom)
+
+        # padding is either 128 or 256
         if padding_max > 128:
             self.padding = 256
         else:
@@ -96,8 +99,3 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         request_data['script_args'] = script_args
 
         return request_data
-
-    # def _post_process(self):
-    #  print(str(self.padding_left) + " : " + str(self.padding_top))
-    #  for layer in self.layers:
-    #      layer.gimp_layer_translate(layer, -50, -50)

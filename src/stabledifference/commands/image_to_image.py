@@ -1,11 +1,10 @@
-# image-to-image command
 import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
 
 
 class ImageToImageCommand(StableDiffusionCommand):
-    uri = "sdapi/v1/img2img"
+    uri = "sdapi/v1/img2img"  # uri for image-to-image command
     metadata = StableDiffusionCommand.CommandMetadata(
         "ImageToImageCommand",
         "StableDifference " + sdiff.__version__ + ": Image to Image",
@@ -18,6 +17,7 @@ class ImageToImageCommand(StableDiffusionCommand):
         [],
         [],
     )
+
     name = "Image to Image"
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
@@ -38,8 +38,10 @@ class ImageToImageCommand(StableDiffusionCommand):
     def _make_request_data(self, **kwargs):
         request_data = StableDiffusionCommand._make_request_data(
             self, **kwargs)
+        # convert denoising strength to float between 0 and 1
         request_data['denoising_strength'] = float(
             kwargs.get('denoising_strength', 75)) / 100
+        # use the image as the initial image
         request_data['init_images'] = [sdiff.gimp.encode_img(
             self.img, self.x, self.y, self.width, self.height)]
         return request_data

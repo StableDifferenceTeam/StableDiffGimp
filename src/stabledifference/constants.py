@@ -17,14 +17,6 @@ SAMPLERS = [
     'DPM++ SDE Karras', 'DDIM', 'PLMS'
 ]
 
-SCRIPT_XY_PLOT_AXIS_OPTIONS = [
-    "Nothing", "Seed", "Var. seed", "Var. strength", "Steps", "CFG Scale", "Prompt S/R", "Prompt order", "Sampler",
-    "Checkpoint name", "Hypernetwork", "Hypernet str.", "Sigma Churn", "Sigma min", "Sigma max", "Sigma noise", "Eta",
-    "Clip skip", "Denoising", "Cond. Image Mask Weight"
-]
-
-PREFERENCES_SHELF_GROUP = 'stable_difference_preferences'
-
 COLOR_SCHEME = {
     "primary": "#bb86fc",
     "foreground": "#ffffff",
@@ -33,3 +25,26 @@ COLOR_SCHEME = {
     "background": "#2c2c2c"
 
 }
+
+PROGRESS_TEXTS = [
+            "AI is drawing...",
+            "Unpacking Creativity...",
+            "Igniting the AI's passion for painting...",
+            "Stabilizing the diffusion...",
+            "Constructing the masterpiece one pixel at a time...",
+            "Generating the next Van Gogh...",
+            "AI is taking a coffee break...",
+            "Inspiriation is flowing...",
+            "AI is thinking...",
+            "Adding perspective...",
+            "AI is painting...",
+            "Putting life into the painting...",
+            "Adding a sprinkle of magic to the artwork...",
+            "Adding a touch of color...",
+            "Adding the Background...",
+            "AI is dancing with the muse of creativity...",
+            "Cleaning digital brushes...",
+            "AI is getting into the flow...",
+            "Adding Love...",
+            "AI is doing it's best (aren't we all?)..."
+        ]

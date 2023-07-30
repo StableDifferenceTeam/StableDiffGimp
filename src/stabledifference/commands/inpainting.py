@@ -1,4 +1,3 @@
-# Inpainting command
 import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
@@ -9,7 +8,7 @@ class InpaintingCommand(ImageToImageCommand):
     uri = "sdapi/v1/img2img"
     metadata = StableDiffusionCommand.CommandMetadata(
         "InpaintingImageCommand",
-        "StableDifference " + sdiff.__version__ + ": Inpainting - Expert mode",
+        "StableDifference " + sdiff.__version__ + ": Inpainting",
         "StableDiffusion Plugin for GIMP",
         "StableDifference",
         "StableDifference",
@@ -45,7 +44,7 @@ class InpaintingCommand(ImageToImageCommand):
     ]
 
     def __init__(self, **kwargs):
-
+        # set command specific parameters
         self.autofit_inpainting = kwargs.get('autofit_inpainting', True)
         self.apply_inpainting_mask = True
         self.apply_inpainting_mask = kwargs.get('apply_inpainting_mask', True)
@@ -53,6 +52,7 @@ class InpaintingCommand(ImageToImageCommand):
 
     def _make_request_data(self, **kwargs):
         req_data = ImageToImageCommand._make_request_data(self, **kwargs)
+        # add inpainting specific parameters
         req_data['inpainting_mask_invert'] = 1
         req_data['inpainting_fill'] = int(kwargs.get('inpainting_fill', 1))
         req_data['mask_blur'] = kwargs.get('mask_blur', 4)
