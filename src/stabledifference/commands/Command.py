@@ -55,7 +55,6 @@ class StableDifferenceCommand(Thread):
 
     @classmethod
     def _open_gtk_options(self, image, drawable, **kwargs):
-
         # ----------------------inner gtk methods-------------------------------
 
         def _toggle_advanced_options(self, dialog, button):
@@ -70,24 +69,21 @@ class StableDifferenceCommand(Thread):
         # add options to the dialog, used for simple and expert options
         def _add_options(options, dialog):
             for option in options:
-
                 if option[0] == "STRING":
+                    hbox = gtk.HBox(True, 10)
                     new_label = gtk.Label(option[2])
                     new_entry = gtk.Entry()
                     new_entry.set_name(option[1])
                     new_entry.set_text(option[3])
-
-                    # new_label.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_entry.modify_base(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    # new_entry.modify_text(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-
-                    dialog.vbox.pack_start(new_label, True, True, 0)
-                    dialog.vbox.pack_start(new_entry, True, True, 0)
+                    hbox.pack_start(new_label, False, False, 5)
+                    hbox.pack_start(new_entry, True, True, 0)
+                    hbox.set_child_packing(
+                        new_label, True, True, 0, gtk.PACK_START)
+                    new_label.set_alignment(0, 0.5)
+                    dialog.vbox.pack_start(hbox, True, True, 0)
 
                 elif option[0] == "SLIDER":
+                    hbox = gtk.HBox(True, 10)
                     new_label = gtk.Label(option[2])
                     new_slider = gtk.HScale()
                     new_slider.set_name(option[1])
@@ -95,73 +91,65 @@ class StableDifferenceCommand(Thread):
                     new_slider.set_increments(option[4][2], option[4][2])
                     new_slider.set_digits(option[4][3])
                     new_slider.set_value(option[3])
-
-                    # new_label.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_slider.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_slider.modify_base(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    # new_slider.modify_text(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-                    # new_slider.modify_cursor(gtk.gdk.color_parse(
-                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
-
-                    dialog.vbox.pack_start(new_label, True, True, 0)
-                    dialog.vbox.pack_start(new_slider, True, True, 0)
+                    hbox.pack_start(new_label, False, False, 5)
+                    hbox.pack_start(new_slider, True, True, 0)
+                    hbox.set_child_packing(
+                        new_label, True, True, 0, gtk.PACK_START)
+                    new_label.set_alignment(0, 0.5)
+                    dialog.vbox.pack_start(hbox, True, True, 0)
 
                 elif option[0] == "OPTION":
+                    hbox = gtk.HBox(True, 10)
                     new_label = gtk.Label(option[2])
                     new_option = gtk.combo_box_new_text()
                     for label in option[4]:
                         new_option.append_text(label)
                     new_option.set_active(option[3])
                     new_option.set_name(option[1])
-
-                    # new_label.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_option.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_option.modify_base(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    # new_option.modify_text(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-                    # new_option.modify_cursor(gtk.gdk.color_parse(
-                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
-
-                    dialog.vbox.pack_start(new_label, True, True, 0)
-                    dialog.vbox.pack_start(new_option, True, True, 0)
+                    hbox.pack_start(new_label, False, False, 0)
+                    hbox.pack_start(new_option, True, True, 0)
+                    hbox.set_child_packing(
+                        new_label, True, True, 0, gtk.PACK_START)
+                    new_label.set_alignment(0, 0.5)
+                    dialog.vbox.pack_start(hbox, True, True, 0)
 
                 elif option[0] == "BOOL":
-                    new_bool = gtk.CheckButton()
-
-                    new_bool.set_label(option[2])
+                    hbox = gtk.HBox(True, 10)
+                    new_label = gtk.Label(option[2])
+                    new_bool = gtk.Button(label=option[3])
                     new_bool.set_name(option[1])
-                    new_bool.set_active(option[3])
-                    dialog.vbox.pack_start(new_label, True, True, 0)
-                    dialog.vbox.pack_start(new_bool, True, True, 0)
+                    new_bool.connect(
+                        "clicked", lambda button: _toggle_bool(button))
+                    hbox.pack_start(new_label, False, False, 5)
+                    hbox.pack_end(new_bool, False, False, 0)
+                    hbox.set_child_packing(
+                        new_label, True, True, 0, gtk.PACK_START)
+                    hbox.set_child_packing(
+                        new_bool, True, True, 0, gtk.PACK_END)
+                    new_label.set_alignment(0, 0.5)
+                    dialog.vbox.pack_start(hbox, True, True, 0)
 
                 elif option[0] == "SPIN_BTN":
+                    hbox = gtk.HBox(True, 10)
                     new_label = gtk.Label(option[2])
                     new_spinbtn = gtk.SpinButton()
-
-                    # new_label.modify_fg(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["foreground"]))
-                    # new_spinbtn.modify_base(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["mid"]))
-                    # new_spinbtn.modify_text(
-                    #    gtk.STATE_NORMAL, gtk.gdk.color_parse(COLORS["on_mid"]))
-                    # new_spinbtn.modify_cursor(gtk.gdk.color_parse(
-                    #    COLORS["primary"]), gtk.gdk.color_parse("#ff0000"))
-
                     new_spinbtn.set_name(option[1])
                     new_spinbtn.set_range(option[4][0], option[4][1])
                     new_spinbtn.set_increments(option[4][2], option[4][2])
                     new_spinbtn.set_value(option[3])
-                    dialog.vbox.pack_start(new_label, True, True, 0)
-                    dialog.vbox.pack_start(new_spinbtn, True, True, 0)
-
+                    hbox.pack_start(new_label, False, False, 0)
+                    hbox.pack_start(new_spinbtn, True, True, 0)
+                    hbox.set_child_packing(
+                        new_label, True, True, 0, gtk.PACK_START)
+                    new_label.set_alignment(0, 0.5)
+                    dialog.vbox.pack_start(hbox, True, True, 0)
             dialog.show_all()
+
+            def _toggle_bool(button):
+                if button.get_label() == 'True':
+                    button.set_label('False')
+                else:
+                    button.set_label('True')
 
         # removes the advanced options from the dialog, and saves the values of the options temporarily
         def _remove_advanced_options(self, dialog):
@@ -169,32 +157,32 @@ class StableDifferenceCommand(Thread):
             expert_options = self.expert_args
             for i in range(len(expert_options)):
                 option = expert_options[i]
-                for widget in dialog.vbox.get_children():
+
+                for hbox in dialog.vbox.get_children():
                     # check for type of widget and name of widget
                     # and if it matches, save its value into expert args of the widget and destroy it
                     # this way, when you input advanced options, collapse and advance, the values are saved
-                    if isinstance(widget, gtk.Label) and widget.get_text() == option[2]:
-                        widget.destroy()
-                    elif isinstance(widget, gtk.HScale) and widget.get_name() == option[1]:
-                        self.expert_args[i] = (
-                            option[0], option[1], option[2], widget.get_value(), option[4])
-                        widget.destroy()
-                    elif isinstance(widget, gtk.CheckButton) and widget.get_name() == option[1]:
-                        self.expert_args[i] = (
-                            option[0], option[1], option[2], widget.get_active())
-                        widget.destroy()
-                    elif isinstance(widget, gtk.SpinButton) and widget.get_name() == option[1]:
-                        self.expert_args[i] = (
-                            option[0], option[1], option[2], widget.get_value(), option[4])
-                        widget.destroy()
-                    elif isinstance(widget, gtk.ComboBox) and widget.get_name() == option[1]:
-                        self.expert_args[i] = (
-                            option[0], option[1], option[2], widget.get_active(), option[4])
-                        widget.destroy()
-                    elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
-                        self.expert_args[i] = (
-                            option[0], option[1], option[2], widget.get_text())
-                        widget.destroy()
+                    for widget in hbox.get_children():
+                        if isinstance(widget, gtk.HScale) and widget.get_name() == option[1]:
+                            self.expert_args[i] = (
+                                option[0], option[1], option[2], widget.get_value(), option[4])
+                            hbox.destroy()
+                        elif isinstance(widget, gtk.Button) and widget.get_name() == option[1]:
+                            self.expert_args[i] = (
+                                option[0], option[1], option[2], widget.get_label())
+                            hbox.destroy()
+                        elif isinstance(widget, gtk.SpinButton) and widget.get_name() == option[1]:
+                            self.expert_args[i] = (
+                                option[0], option[1], option[2], widget.get_value(), option[4])
+                            hbox.destroy()
+                        elif isinstance(widget, gtk.ComboBox) and widget.get_name() == option[1]:
+                            self.expert_args[i] = (
+                                option[0], option[1], option[2], widget.get_active(), option[4])
+                            hbox.destroy()
+                        elif isinstance(widget, gtk.Entry) and widget.get_name() == option[1]:
+                            self.expert_args[i] = (
+                                option[0], option[1], option[2], widget.get_text())
+                            hbox.destroy()
 
             # resize the dialog to the minimum size
             dialog.resize(1, 1)
@@ -204,27 +192,28 @@ class StableDifferenceCommand(Thread):
         # saves the values of the dialog into a dictionary
         def get_kwargs(dialog):
             kwargs = {}
-            for widget in dialog.vbox.get_children():
-                if isinstance(widget, gtk.HScale):
-                    kwargs.update({widget.get_name(): widget.get_value()})
-                elif isinstance(widget, gtk.CheckButton):
-                    kwargs.update({widget.get_label(): widget.get_active()})
-                elif isinstance(widget, gtk.SpinButton):
-                    kwargs.update({widget.get_name(): widget.get_value()})
-                elif isinstance(widget, gtk.ComboBox):
-                    kwargs.update({widget.get_name(): widget.get_active()})
-                elif isinstance(widget, gtk.Entry):
-                    kwargs.update({widget.get_name(): widget.get_text()})
+            for hbox in dialog.vbox.get_children():
+                for widget in hbox.get_children():
+                    if isinstance(widget, gtk.HScale):
+                        kwargs.update({widget.get_name(): widget.get_value()})
+                    elif isinstance(widget, gtk.Button):
+                        kwargs.update(
+                            {widget.get_name(): True if widget.get_label() == 'True' else False})
+                    elif isinstance(widget, gtk.SpinButton):
+                        kwargs.update({widget.get_name(): widget.get_value()})
+                    elif isinstance(widget, gtk.ComboBox):
+                        kwargs.update({widget.get_name(): widget.get_active()})
+                    elif isinstance(widget, gtk.Entry):
+                        kwargs.update({widget.get_name(): widget.get_text()})
             return kwargs
 
         # -------------------------inner functions end--------------------------
         # Create a new GTK dialog and set its Name
         dialog = gtk.Dialog(title=self.name)
         dialog.present()
-
+        dialog.set_size_request(500, -1)
         dialog.set_border_width(10)
-        # dialog.modify_bg(gtk.STATE_NORMAL,
-        #                 gtk.gdk.color_parse(COLORS["background"]))
+        dialog.vbox.set_spacing(3)
 
         # add the simple options to the dialog (minimum required options)
         simple_options = self.simple_args
@@ -233,6 +222,7 @@ class StableDifferenceCommand(Thread):
         # Create a new GTK button to show/hide the advanced options in case they are not empty
         if self.expert_args:
             advanced_button = gtk.Button(label='Expand')
+            # make the button size as small to only fit the text
             advanced_button.connect(
                 'clicked', lambda button: _toggle_advanced_options(self, dialog, advanced_button))
             dialog.vbox.pack_start(advanced_button, True, True, 0)

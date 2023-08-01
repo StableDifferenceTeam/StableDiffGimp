@@ -33,7 +33,7 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
         ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
-        ("BOOL", 'restore_faces', 'Restore faces', False),
+        ("BOOL", 'restore_faces', 'Restore faces', 'False'),
         ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5, 1)),
         ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
         ("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),

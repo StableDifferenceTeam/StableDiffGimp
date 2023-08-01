@@ -29,18 +29,18 @@ class InpaintingCommand(ImageToImageCommand):
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
         ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),
-        ("BOOL", 'restore_faces', 'Restore faces', False),
+        ("BOOL", 'restore_faces', 'Restore faces', 'False'),
         ("SLIDER", 'cfg_scale', 'CFG', 7.5, (0, 20, 0.5, 1)),
         ("SPIN_BTN", 'num_images', 'Number of images', 1, (1, 4, 1)),
         ("OPTION", 'img_target', 'Results as', 0, sdiff.constants.IMAGE_TARGETS),
         ("OPTION", 'inpainting_fill', 'Inpainting fill',
          1, sdiff.constants.INPAINTING_FILL_MODE),
-        ("BOOL", 'inpaint_full_res', 'Inpaint at full resolution', True),
+        ("BOOL", 'inpaint_full_res', 'Inpaint at full resolution', 'True'),
         ("SLIDER", 'inpaint_full_res_padding',
             'Full res. inpainting padding', 0, (0, 128, 1, 0)),
-        ("BOOL", 'autofit_inpainting', 'Autofit inpainting region', True),
+        ("BOOL", 'autofit_inpainting', 'Autofit inpainting region', 'True'),
         ("SLIDER", 'mask_blur', 'Mask blur', 4, (0, 32, 1, 0)),
-        ("BOOL", 'apply_inpainting_mask', 'Apply inpainting mask', True),
+        ("BOOL", 'apply_inpainting_mask', 'Apply inpainting mask', 'True'),
     ]
 
     def __init__(self, **kwargs):
