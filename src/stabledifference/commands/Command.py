@@ -312,6 +312,19 @@ class StableDiffusionCommand(StableDifferenceCommand):
                     print('request: ' + req_path)
                     req_file.write(json.dumps(self.req_data))
 
+            #use prompt generation
+            if True:
+                user_prompt=self.req_data.get('prompt')
+                prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
+                req = Request('https://9cad679301ec279a22.gradio.live/run/predict')
+                req.add_header('Content-Type', 'application/json')
+
+
+
+                response = urlopen(req, json.dumps(prompt_gen_data))
+                data_json = json.loads(response.read())
+                self.req_data.update({'prompt':data_json.get('data')[0]})
+
             # create the request data in json format
             self.sd_request = Request(url=self.url,
                                       headers={
