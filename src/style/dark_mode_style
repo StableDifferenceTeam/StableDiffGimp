@@ -1,0 +1,184 @@
+gtk-color-scheme	= "bg_color:#ffffff"
+gtk-color-scheme	= "fg_color:#000000"
+gtk-color-scheme	= "base_color:#FFFFFF" # Background, base.
+gtk-color-scheme	= "text_color:#000000" # Foreground, text.
+gtk-color-scheme	= "selected_bg_color:#bb86fc"
+gtk-color-scheme	= "selected_fg_color:#000000"
+gtk-color-scheme	= "tooltip_bg_color:#FFFFFF"
+gtk-color-scheme	= "tooltip_fg_color:#000000" # Tooltips.
+gtk-color-scheme	= "link_color:#224ba0" # Hyperlinks
+gtk-color-scheme	= "panel_bg:#000000" # Panel bg color
+gtk-color-scheme	= "fm_color:#000000" # Color used in Nautilus and Thunar.
+gtk-color-scheme	= "bg_color_dark:#000000"
+gtk-color-scheme	= "text_color_dark:#ffffff"
+gtk-color-scheme	= "shadow_color:#000000" # Xfce desktp icons shadow color
+
+
+style "dark-background" {
+  fg[NORMAL] = "#ffffff"
+  text[NORMAL] = "#b3b3b3"
+  text[SELECTED] = "#000000"
+  base[NORMAL] = "#121212"
+  bg[NORMAL] = "#2c2c2c"
+  bg[SELECTED] = "#bb86fc"
+
+  xthickness = 0
+  ythickness = 0
+
+  engine "murrine"
+  {
+    focus_color = "#bb86fc"
+    focus_style = "solid"
+  }
+
+}
+
+style "button" {
+  fg[NORMAL] = "#b3b3b3"
+  fg[PRELIGHT] = "#ffffff"
+  bg[NORMAL] = "#121212"
+
+
+
+  xthickness = 0
+  ythickness = 0
+
+  # include the assets/button.png
+  engine "pixmap" {
+    
+    image {
+      function = BOX
+      state = PRELIGHT
+      recolorable = TRUE
+      file = "assets/bb86fc.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+
+    image {
+      function = BOX
+      file = "assets/121212.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+  }
+}
+
+style "progress_bar" {
+  fg[NORMAL] = "#b3b3b3"
+  fg[PRELIGHT] = "#ffffff"
+  bg[NORMAL] = "#121212"
+
+  xthickness = 0
+  ythickness = 0
+
+  engine "pixmap" {
+    image {
+      function = BOX
+      state = PRELIGHT
+      file = "assets/bb86fc.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+  }
+
+}
+
+style "slider" {
+  fg[NORMAL] = "#b3b3b3"
+  text[NORMAL] = "#b3b3b3"
+  bg[NORMAL] = "#ff0000"
+  bg[PRELIGHT] = "#ff0000"
+  bg[ACTIVE] = "#ff0000"
+  bg[SELECTED] = "#ff0000"
+  bg[INSENSITIVE] = "#ff0000"
+
+
+  engine "pixmap" {
+    image {
+      function = SLIDER
+      state = NORMAL
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    image {
+      function = SLIDER
+      state = PRELIGHT
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    image {
+      function = SLIDER
+      state = INSENSITIVE
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    
+
+    # Function below removes ugly boxes
+
+    image {
+      function = BOX
+      file = "assets/121212-horiz.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+    }
+  }
+}
+
+
+
+widget_class "*<GtkDialog>*" style "dark-background"
+#widget_class "*<GtkEntry>*" style "dark-foreground"
+#widget_class "*<GtkScale>*" style "dark-mid"
+#widget_class "*<GtkHScrollbar>*" style "dark-mid"
+#widget_class "*<GtkVScrollbar>*" style "dark-mid"
+widget_class "*<GtkButton>*" style "button"
+#widget_class "*<GtkLabel>*" style "dark-foreground"
+#widget_class "*<GtkComboBox>*" style "dark-accent"
+#widget_class "*<GtkSpinButton>*" style "dark-accent"
+widget_class "*<GtkProgressBar>*" style "progress_bar"
+widget_class "*<GtkScale>*" style "slider"
+
+
+#class "GtkScale" style "dark-scale" {
+#  GtkScale::slider_width = 20
+#}
+#
+## Custom style for slider grip (GtkRange)
+#class "GtkRange" style "dark-foreground" {
+#  GtkRange::slider_width = 20
+#  GtkRange::slider_length = 20
+#  GtkRange::stepper_size = 20
+#  GtkRange::trough_border = 2
+#  GtkRange::trough-under-steppers = 0
+#}
+#
+## Custom style for the slider grip when it's active
+#class "GtkRange" style "dark-accent" {
+#  engine "pixmap" {
+#      image {
+#          function = BOX
+#          recolorable = TRUE
+#          state = ACTIVE
+#          overlay_file = "grip-accent.png"
+#          overlay_border = { 1, 1, 1, 1 }
+#          stretch = TRUE
+#      }
+#  }
+#}

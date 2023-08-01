@@ -19,7 +19,7 @@ def run_stable_diffusion_command(cmd):
         # open a new dialog for the progress bar
         dialog = gtk.Dialog(" ")
         dialog.set_position(gtk.WIN_POS_CENTER)
-        dialog.set_size_request(500, 50)
+        dialog.set_size_request(500, 70)
         dialog.set_resizable(False)
         dialog.set_modal(True)
         dialog.present()
@@ -31,7 +31,7 @@ def run_stable_diffusion_command(cmd):
         progressbar.set_text("Processing...")
 
         # add the progress bar to the dialog
-        dialog.vbox.pack_start(progressbar, True, True, 0)
+        dialog.vbox.pack_start(progressbar, True, True, 10)
         progressbar.show()
         dialog.show()
 

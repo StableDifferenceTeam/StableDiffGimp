@@ -215,6 +215,10 @@ class StableDifferenceCommand(Thread):
         dialog.set_border_width(10)
         dialog.vbox.set_spacing(3)
 
+        style_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "style")
+        #dialog.set_title(str(assets_path))
+        gtk.rc_parse(os.path.join(style_path, "dark_mode_style"))
+
         # add the simple options to the dialog (minimum required options)
         simple_options = self.simple_args
         _add_options(simple_options, dialog)
