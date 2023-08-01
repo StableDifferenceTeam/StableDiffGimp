@@ -263,7 +263,8 @@ class StableDiffusionCommand(StableDifferenceCommand):
     if not os.path.isfile(os.path.join(path, "settings.json")):
         print("settings.json does not exist")
         with open(os.path.join(path, "settings.json"), 'w') as f:
-            json.dump({"api_base_url": sdiff.constants.DEFAULT_API_URL}, f)
+            json.dump({"api_base_url": sdiff.constants.DEFAULT_API_URL, 
+                       "prompt_gen_api_base_url": sdiff.constants.DEFAULT_PROMPT_GEN_API_URL}, f)
 
     # read the api url from the settings.json file
     with open(os.path.join(path, "settings.json"), 'r') as f:
@@ -316,7 +317,9 @@ class StableDiffusionCommand(StableDifferenceCommand):
             if True:
                 user_prompt=self.req_data.get('prompt')
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
-                req = Request('https://9cad679301ec279a22.gradio.live/run/predict')
+                url=sdiff.constants.DEFAULT_PROMPT_GEN_API_URL+'/run/predict'
+                print(url)
+                req = Request(url)
                 req.add_header('Content-Type', 'application/json')
 
 
