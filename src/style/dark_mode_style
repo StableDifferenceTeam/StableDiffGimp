@@ -13,14 +13,21 @@ gtk-color-scheme	= "bg_color_dark:#000000"
 gtk-color-scheme	= "text_color_dark:#ffffff"
 gtk-color-scheme	= "shadow_color:#000000" # Xfce desktp icons shadow color
 
+gtk-button-images	= 0 # disable Icons in eg OK and Cancel
+gtk-auto-mnemonics	= 0 # disable Automatic Underlines
 
 style "dark-background" {
   fg[NORMAL] = "#ffffff"
   text[NORMAL] = "#b3b3b3"
-  text[SELECTED] = "#000000"
+  text[SELECTED] = "#ffffff"
   base[NORMAL] = "#121212"
   bg[NORMAL] = "#2c2c2c"
-  bg[SELECTED] = "#bb86fc"
+  base[SELECTED] = "#bb86fc"
+  base[ACTIVE] = "#bb86fc"
+  text[ACTIVE] = "#000000"
+  fg[ACTIVE] = "#b3b3b3"
+
+
 
   xthickness = 0
   ythickness = 0
@@ -141,44 +148,12 @@ style "slider" {
   }
 }
 
-
+#style "combo-box" {
+#  # TODO style the combo box
+#}
 
 widget_class "*<GtkDialog>*" style "dark-background"
-#widget_class "*<GtkEntry>*" style "dark-foreground"
-#widget_class "*<GtkScale>*" style "dark-mid"
-#widget_class "*<GtkHScrollbar>*" style "dark-mid"
-#widget_class "*<GtkVScrollbar>*" style "dark-mid"
 widget_class "*<GtkButton>*" style "button"
-#widget_class "*<GtkLabel>*" style "dark-foreground"
-#widget_class "*<GtkComboBox>*" style "dark-accent"
-#widget_class "*<GtkSpinButton>*" style "dark-accent"
 widget_class "*<GtkProgressBar>*" style "progress_bar"
 widget_class "*<GtkScale>*" style "slider"
-
-
-#class "GtkScale" style "dark-scale" {
-#  GtkScale::slider_width = 20
-#}
-#
-## Custom style for slider grip (GtkRange)
-#class "GtkRange" style "dark-foreground" {
-#  GtkRange::slider_width = 20
-#  GtkRange::slider_length = 20
-#  GtkRange::stepper_size = 20
-#  GtkRange::trough_border = 2
-#  GtkRange::trough-under-steppers = 0
-#}
-#
-## Custom style for the slider grip when it's active
-#class "GtkRange" style "dark-accent" {
-#  engine "pixmap" {
-#      image {
-#          function = BOX
-#          recolorable = TRUE
-#          state = ACTIVE
-#          overlay_file = "grip-accent.png"
-#          overlay_border = { 1, 1, 1, 1 }
-#          stretch = TRUE
-#      }
-#  }
-#}
+#widget_class "*<GtkComboBox>*" style "combo-box"
