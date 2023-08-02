@@ -47,6 +47,6 @@ class SettingsCommand(StableDifferenceCommand):
         if 'api_base_url' in kwargs and 'styling' in kwargs:
             with open(os.path.join(path, "settings.json"), 'w') as f:
                json.dump({
-                   'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL),
-                   'styling': sdiff.constants.STYLING_THEMES[kwargs.get('styling', 1)]
+                   'api_base_url': kwargs['api_base_url']
+                   'styling': sdiff.constants.STYLING_THEMES[kwargs['styling']]
                           }, f)
