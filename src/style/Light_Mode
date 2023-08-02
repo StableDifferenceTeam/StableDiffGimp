@@ -1,0 +1,140 @@
+gtk-color-scheme	= "bg_color:#00ff00"#000000"
+gtk-color-scheme	= "fg_color:#00ff00"#ffffff"
+gtk-color-scheme	= "base_color:#00ff00"#000000"
+gtk-color-scheme	= "text_color:#00ff00"#ffffff"
+gtk-color-scheme	= "selected_bg_color:#00ff00"#bb86fc"
+gtk-color-scheme	= "selected_fg_color:#00ff00"#ffffff"
+
+gtk-button-images	= 0 # disable Icons in eg OK and Cancel
+gtk-auto-mnemonics	= 0 # disable Automatic Underlines
+
+style "basic" {
+  fg[NORMAL] = "#000000"
+  fg[PRELIGHT] = "#ffffff"
+  text[NORMAL] = "#2c2c2c"
+  text[SELECTED] = "#000000"
+  text[ACTIVE] = "#ffffff"
+  base[NORMAL] = "#e3e3e3"
+  bg[NORMAL] = "#fafafa"
+  base[SELECTED] = "#bb86fc"
+  base[ACTIVE] = "#bb86fc"
+  
+  fg[ACTIVE] = "#2c2c2c"
+
+  font_name = "sans 10"
+
+  xthickness = 0
+  ythickness = 0
+}
+
+style "button" {
+  fg[NORMAL] = "#2c2c2c"
+  fg[PRELIGHT] = "#ffffff"
+  bg[NORMAL] = "#121212"
+
+
+
+  xthickness = 0
+  ythickness = 0
+
+  engine "pixmap" {
+    
+    image {
+      function = BOX
+      state = PRELIGHT
+      recolorable = TRUE
+      file = "assets/bb86fc.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+
+    image {
+      function = BOX
+      file = "assets/e3e3e3.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+  }
+}
+
+style "progress_bar" {
+  fg[NORMAL] = "#2c2c2c"
+  fg[PRELIGHT] = "#000000"
+  bg[NORMAL] = "#121212"
+
+  xthickness = 0
+  ythickness = 0
+
+  engine "pixmap" {
+    image {
+      function = BOX
+      state = PRELIGHT
+      file = "assets/bb86fc.png"
+      border = { 1, 1, 1, 1 }
+      stretch = TRUE
+    }
+  }
+
+}
+
+style "slider" {
+  fg[NORMAL] = "#2c2c2c"
+  text[NORMAL] = "#2c2c2c"
+  bg[NORMAL] = "#ff0000"
+  bg[PRELIGHT] = "#ff0000"
+  bg[ACTIVE] = "#ff0000"
+  bg[SELECTED] = "#ff0000"
+  bg[INSENSITIVE] = "#ff0000"
+
+
+  engine "pixmap" {
+    image {
+      function = SLIDER
+      state = NORMAL
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    image {
+      function = SLIDER
+      state = PRELIGHT
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    image {
+      function = SLIDER
+      state = INSENSITIVE
+      file = "assets/null.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+      overlay_file = "assets/bb86fc.png"
+      overlay_stretch = FALSE
+      orientation = HORIZONTAL
+    }
+
+    
+
+    # Function below removes ugly boxes
+
+    image {
+      function = BOX
+      file = "assets/e3e3e3-horiz.png"
+      border = { 0, 0, 0, 0 }
+      stretch = TRUE
+    }
+  }
+}
+
+widget_class "*<GtkWindow>*" style "basic"
+widget_class "*<GtkButton>*" style "button"
+widget_class "*<GtkProgressBar>*" style "progress_bar"
+widget_class "*<GtkScale>*" style "slider"

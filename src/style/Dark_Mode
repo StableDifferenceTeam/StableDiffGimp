@@ -1,43 +1,29 @@
-gtk-color-scheme	= "bg_color:#ffffff"
-gtk-color-scheme	= "fg_color:#000000"
-gtk-color-scheme	= "base_color:#FFFFFF" # Background, base.
-gtk-color-scheme	= "text_color:#000000" # Foreground, text.
-gtk-color-scheme	= "selected_bg_color:#bb86fc"
-gtk-color-scheme	= "selected_fg_color:#000000"
-gtk-color-scheme	= "tooltip_bg_color:#FFFFFF"
-gtk-color-scheme	= "tooltip_fg_color:#000000" # Tooltips.
-gtk-color-scheme	= "link_color:#224ba0" # Hyperlinks
-gtk-color-scheme	= "panel_bg:#000000" # Panel bg color
-gtk-color-scheme	= "fm_color:#000000" # Color used in Nautilus and Thunar.
-gtk-color-scheme	= "bg_color_dark:#000000"
-gtk-color-scheme	= "text_color_dark:#ffffff"
-gtk-color-scheme	= "shadow_color:#000000" # Xfce desktp icons shadow color
+gtk-color-scheme	= "bg_color:#00ff00"#ffffff"
+gtk-color-scheme	= "fg_color:#00ff00"#000000"
+gtk-color-scheme	= "base_color:#00ff00"#FFFFFF"
+gtk-color-scheme	= "text_color:#00ff00"#000000"
+gtk-color-scheme	= "selected_bg_color:#00ff00"#bb86fc"
+gtk-color-scheme	= "selected_fg_color:#00ff00"#000000"
 
 gtk-button-images	= 0 # disable Icons in eg OK and Cancel
 gtk-auto-mnemonics	= 0 # disable Automatic Underlines
 
-style "dark-background" {
+style "basic" {
   fg[NORMAL] = "#ffffff"
   text[NORMAL] = "#b3b3b3"
   text[SELECTED] = "#ffffff"
+  text[ACTIVE] = "#000000"
   base[NORMAL] = "#121212"
   bg[NORMAL] = "#2c2c2c"
   base[SELECTED] = "#bb86fc"
   base[ACTIVE] = "#bb86fc"
-  text[ACTIVE] = "#000000"
+  
   fg[ACTIVE] = "#b3b3b3"
 
-
+  font_name = "sans 10"
 
   xthickness = 0
   ythickness = 0
-
-  engine "murrine"
-  {
-    focus_color = "#bb86fc"
-    focus_style = "solid"
-  }
-
 }
 
 style "button" {
@@ -50,7 +36,6 @@ style "button" {
   xthickness = 0
   ythickness = 0
 
-  # include the assets/button.png
   engine "pixmap" {
     
     image {
@@ -148,12 +133,7 @@ style "slider" {
   }
 }
 
-#style "combo-box" {
-#  # TODO style the combo box
-#}
-
-widget_class "*<GtkDialog>*" style "dark-background"
+widget_class "*<GtkWindow>*" style "basic"
 widget_class "*<GtkButton>*" style "button"
 widget_class "*<GtkProgressBar>*" style "progress_bar"
 widget_class "*<GtkScale>*" style "slider"
-#widget_class "*<GtkComboBox>*" style "combo-box"
