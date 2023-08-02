@@ -21,15 +21,20 @@ class SettingsCommand(StableDifferenceCommand):
 
     # use the api url from the settings file as default
     old_url = sdiff.constants.DEFAULT_API_URL
+    old_styling = sdiff.constants.STYLING_THEMES[1]
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
     with open(os.path.join(path, "settings.json"), 'r') as f:
-       settings = json.load(f)
-       old_url = settings['api_base_url']
+        settings = json.load(f)
+        old_url = settings['api_base_url']
+        old_styling = settings['styling']
 
-    # arguments for the gtk dialog is only the api url here
+     # arguments for the gtk dialog is only the api url here
     simple_args = [
         ("STRING", "api_base_url", "API base URL", old_url),
+        ("OPTION", 'styling', 'Styling', sdiff.constants.STYLING_THEMES.index(old_styling), 
+            sdiff.constants.STYLING_THEMES
+        ),
     ]
     
 
@@ -40,4 +45,7 @@ class SettingsCommand(StableDifferenceCommand):
         path = os.path.dirname(os.path.abspath(__file__))
         path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
         with open(os.path.join(path, "settings.json"), 'w') as f:
-           json.dump({'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL)}, f)
+           json.dump({
+               'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL),
+               'styling': sdiff.constants.STYLING_THEMES[kwargs.get('styling', 1)]
+                      }, f)

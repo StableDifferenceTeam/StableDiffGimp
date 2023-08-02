@@ -8,7 +8,6 @@ from urllib2 import Request, urlopen
 from collections import namedtuple
 from stabledifference.command_runner import config
 import stabledifference as sdiff
-from stabledifference.constants import COLOR_SCHEME as COLORS
 import gimpfu
 import gtk
 from gimpfu import *
@@ -263,12 +262,21 @@ class StableDiffusionCommand(StableDifferenceCommand):
     if not os.path.isfile(os.path.join(path, "settings.json")):
         print("settings.json does not exist")
         with open(os.path.join(path, "settings.json"), 'w') as f:
-            json.dump({"api_base_url": sdiff.constants.DEFAULT_API_URL}, f)
+            json.dump({
+                "api_base_url": sdiff.constants.DEFAULT_API_URL,
+                "styling": "Dark Mode"
+                       }, f)
 
     # read the api url from the settings.json file
     with open(os.path.join(path, "settings.json"), 'r') as f:
         settings = json.load(f)
         api_url = settings['api_base_url']
+        styling = settings['styling']
+    
+    # set the styling
+    if styling != "None":
+        style_path = os.path.join(path, "src", "style")
+        gtk.rc_parse(os.path.join(style_path, styling.replace(" ", "_")))
 
     def __init__(self, **kwargs):
         StableDifferenceCommand.__init__(self, **kwargs)

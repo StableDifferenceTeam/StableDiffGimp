@@ -17,14 +17,7 @@ SAMPLERS = [
     'DPM++ SDE Karras', 'DDIM', 'PLMS'
 ]
 
-COLOR_SCHEME = {
-    "primary": "#bb86fc",
-    "foreground": "#ffffff",
-    "on_mid": "#b3b3b3",
-    "mid": "#505050",
-    "background": "#2c2c2c"
-
-}
+STYLING_THEMES = ['None', 'Dark Mode', 'Light Mode']
 
 PROGRESS_TEXTS = [
             "AI is drawing...",
