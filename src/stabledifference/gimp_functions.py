@@ -13,12 +13,12 @@ def encode_png(img_path):
         return 'data:image/png;base64,' + str(base64.b64encode(img.read()))
 
 
-# encodes an image
+# encode an image with specific dimensions from the GIMP image
 def encode_img(img, x, y, width, height):
     # copy the image
     img_cpy = pdb.gimp_image_duplicate(img)
 
-    # get the 'Inpainting Maks' layer
+    # get the 'Inpainting Mask' layer
     inp_layer = pdb.gimp_image_get_layer_by_name(
         img_cpy, constants.MASK_LAYER_NAME)
     # if an inpainting mask exists, remove it from the image
@@ -28,13 +28,13 @@ def encode_img(img, x, y, width, height):
     # select the rectangle (necessary for text to image)
     pdb.gimp_image_select_rectangle(img_cpy, 2, x, y, width, height)
 
-    # flatten the image
+    # flatten the image 
     pdb.gimp_edit_copy_visible(img_cpy)
     img_flat = pdb.gimp_edit_paste_as_new_image()
     img_flat_path = tempfile.mktemp(suffix='.png')
     pdb.file_png_save_defaults(
         img_flat, img_flat.layers[0], img_flat_path, img_flat_path)
-    # and encode it
+    # encode the image
     encoded_img = encode_png(img_flat_path)
     # remove the temporary image
     os.remove(img_flat_path)
@@ -48,7 +48,7 @@ def active_area(img):
     _, x, y, x2, y2 = pdb.gimp_selection_bounds(img)
     return x, y, x2 - x, y2 - y
 
-
+# autofit inpainting area according to predefined dimensions
 def autofit_inpainting_area(img):
     # raise an exception if there is no 'Inpainting Mask' layer available
     if not pdb.gimp_image_get_layer_by_name(img, constants.MASK_LAYER_NAME):
@@ -82,7 +82,7 @@ def autofit_inpainting_area(img):
         y = 0
     return x, y, target_width, target_height
 
-
+# encode the inpainting mask layer of the image with specific dimensions
 def encode_mask(img, x, y, width, height):
     # raise an exception if there is no 'Inpainting Mask' layer available
     if not pdb.gimp_image_get_layer_by_name(img, constants.MASK_LAYER_NAME):
@@ -123,7 +123,7 @@ def decode_png(encoded_png):
         return png_img_path
 
 
-# open the images in gimp
+# open the encoded images in gimp
 def open_images(images):
     if not images:
         return

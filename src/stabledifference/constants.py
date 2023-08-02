@@ -1,16 +1,23 @@
+# default URL for connecting to the API
 DEFAULT_API_URL = 'http://localhost:7860'
 
+# layer name used for inpainting
 MASK_LAYER_NAME = 'Inpainting Mask'
 
+# options for the target
 IMAGE_TARGETS = ['Layers', 'Images']
 
+# different modes available for image processing
 MODES = ['Text to Image', 'Image to Image', 'Inpainting']
 
+# options for the fill mode in inpainting
 INPAINTING_FILL_MODE = ['Fill', 'Original', 'Latent noise', 'Latent nothing']
 
+# upscaling method options
 UPSCALERS = ['None', 'Lanczos', 'Nearest', 'LDSR',
              'ESRGAN_4x', 'SwinIR_4x', 'ScuNET', 'ScuNET PSNR']
 
+# sample method options 
 SAMPLERS = [
     'Euler a', 'Euler', 'LMS', 'Heun', 'DPM2', 'DPM2 a', 'DPM++ 2S a', 'DPM++ 2M', 'DPM++ SDE', 'DPM fast',
     'DPM adaptive', 'LMS Karras', 'DPM2 Karras', 'DPM2 a Karras', 'DPM++ 2S a Karras', 'DPM++ 2M Karras',
@@ -26,6 +33,7 @@ COLOR_SCHEME = {
 
 }
 
+# text that is displayed during the drawing process
 PROGRESS_TEXTS = [
             "AI is drawing...",
             "Unpacking Creativity...",
