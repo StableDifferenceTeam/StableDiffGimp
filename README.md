@@ -82,7 +82,7 @@ Most our features exist in an Expert and a Simple Mode.
 
 
 ### Uncrop
-- Crops an existing image to a variable size
+- Uncrops an existing image to a variable size and adds a prompt
 
 1. Insert an existing picture into your GIMP
 2. Click on `StableDifference`, then `Uncrop`, then `Simple Mode`
