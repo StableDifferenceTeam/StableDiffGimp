@@ -1,5 +1,7 @@
 DEFAULT_API_URL = 'http://localhost:7860'
 
+DEFAULT_PROMPT_GEN_API_URL = ''
+
 MASK_LAYER_NAME = 'Inpainting Mask'
 
 IMAGE_TARGETS = ['Layers', 'Images']
