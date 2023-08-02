@@ -44,8 +44,9 @@ class SettingsCommand(StableDifferenceCommand):
         # save the api url to the settings file
         path = os.path.dirname(os.path.abspath(__file__))
         path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
-        with open(os.path.join(path, "settings.json"), 'w') as f:
-           json.dump({
-               'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL),
-               'styling': sdiff.constants.STYLING_THEMES[kwargs.get('styling', 1)]
-                      }, f)
+        if 'api_base_url' in kwargs and 'styling' in kwargs:
+            with open(os.path.join(path, "settings.json"), 'w') as f:
+               json.dump({
+                   'api_base_url': kwargs.get('api_base_url', sdiff.constants.DEFAULT_API_URL),
+                   'styling': sdiff.constants.STYLING_THEMES[kwargs.get('styling', 1)]
+                          }, f)
