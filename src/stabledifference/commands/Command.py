@@ -317,8 +317,9 @@ class StableDiffusionCommand(StableDifferenceCommand):
 
             #use prompt generation
             prompt = self.req_data.get('prompt')
-            if prompt is not "" and self.prompt_gen_api_url is not "":
+            if (len(prompt) is not 0 and len(self.prompt_gen_api_url) is not 0):
                 print("Prompt: "+prompt)
+                print("api: "+self.prompt_gen_api_url)
                 user_prompt=self.req_data.get('prompt')
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
                 url=self.prompt_gen_api_url+'/run/predict'
