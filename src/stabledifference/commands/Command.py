@@ -255,6 +255,7 @@ class StableDifferenceCommand(Thread):
 class StableDiffusionCommand(StableDifferenceCommand):
     uri = ''
     api_url = ''
+    prompt_gen_api_url=''
 
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
@@ -270,6 +271,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
     with open(os.path.join(path, "settings.json"), 'r') as f:
         settings = json.load(f)
         api_url = settings['api_base_url']
+        prompt_gen_api_url = settings['prompt_gen_api_base_url']
 
     def __init__(self, **kwargs):
         StableDifferenceCommand.__init__(self, **kwargs)
@@ -314,19 +316,30 @@ class StableDiffusionCommand(StableDifferenceCommand):
                     req_file.write(json.dumps(self.req_data))
 
             #use prompt generation
-            if True:
+            prompt = self.req_data.get('prompt')
+            if prompt is not "" and self.prompt_gen_api_url is not "":
+                print("Prompt: "+prompt)
                 user_prompt=self.req_data.get('prompt')
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
-                url=sdiff.constants.DEFAULT_PROMPT_GEN_API_URL+'/run/predict'
+                url=self.prompt_gen_api_url+'/run/predict'
                 print(url)
                 req = Request(url)
                 req.add_header('Content-Type', 'application/json')
-
-
-
-                response = urlopen(req, json.dumps(prompt_gen_data))
-                data_json = json.loads(response.read())
-                self.req_data.update({'prompt':data_json.get('data')[0]})
+                
+                try:
+                    response = urlopen(req, json.dumps(prompt_gen_data))
+                    data_json = json.loads(response.read())
+                    self.req_data.update({'prompt':data_json.get('data')[0]})
+                    print("Generated prompt: "+data_json.get('data')[0])
+                except Exception as e:
+                    print(e)
+                    pdb.gimp_message_set_handler(MESSAGE_BOX)
+                    pdb.gimp_message("-----------------------------------------------------------------------------------\n" +
+                             "An error occurred while calling the prompt generation model:\n" +
+                             "-----------------------------------------------------------------------------------\n"+str(e))
+                
+            
+                
 
             # create the request data in json format
             self.sd_request = Request(url=self.url,

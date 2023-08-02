@@ -32,8 +32,8 @@ class SettingsCommand(StableDifferenceCommand):
 
     # arguments for the gtk dialog are the api urls here
     simple_args = [
-        ("STRING", "api_base_url", "API base URL", old_url),
-        ("STRING", "prompt_gen_api_base_url", "Prompt generators API base URL", old_prompt_gen_url),
+        ("STRING", "api_base_url", "Stable Diffusion API base URL", old_url),
+        ("STRING", "prompt_gen_api_base_url", "Prompt generators API base URL,\nleave empty for deactivating it", old_prompt_gen_url),
     ]
     
 
