@@ -19,7 +19,8 @@ def run_stable_diffusion_command(cmd):
         # open a new dialog for the progress bar
         dialog = gtk.Dialog(" ")
         dialog.set_position(gtk.WIN_POS_CENTER)
-        dialog.set_size_request(500, 70)
+        dialog.set_border_width(10)
+        dialog.set_size_request(500, -1)
         dialog.set_resizable(False)
         dialog.set_modal(True)
         dialog.present()
@@ -30,8 +31,20 @@ def run_stable_diffusion_command(cmd):
         progressbar.set_pulse_step(0.1)
         progressbar.set_text("Processing...")
 
+        
+            
+
         # add the progress bar to the dialog
-        dialog.vbox.pack_start(progressbar, True, True, 10)
+        dialog.vbox.pack_start(progressbar, True, True, 0)
+
+        if cmd.prompt_gen_api_url != "":
+            prompt = gtk.Label(cmd.generated_prompt)
+            prompt.set_line_wrap(True)
+            prompt.set_alignment(0.5, 0.5)
+        
+            dialog.vbox.pack_start(prompt, True, True, 0)
+            prompt.show()
+            
         progressbar.show()
         dialog.show()
 
@@ -50,6 +63,8 @@ def run_stable_diffusion_command(cmd):
                 progressbar.set_text(new_text)
 
             progressbar.pulse()
+            if cmd.prompt_gen_api_url != "" and cmd.generated_prompt != "":
+                prompt.set_text("Generated prompt:\n"+cmd.generated_prompt)
             # update the dialog
             while gtk.events_pending():
                 gtk.main_iteration()
