@@ -5,7 +5,10 @@ import gimpfu
 
 
 class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
+    # endpoint URI for the uncrop command
     uri = "sdapi/v1/img2img"
+
+    # metadata for the UncropCommand
     metadata = StableDiffusionCommand.CommandMetadata(
         "SimpleUncropCommand",
         "StableDifference " + sdiff.__version__ + ": Uncrop",
@@ -17,10 +20,10 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         "*",
         [],
         [],
-
-
     )
+    # command name displayed to the user
     name = "Uncrop"
+    # simple arguments that the user sees by default in the dialog box
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", "padding_left", "Padding left", 128, (0, 256, 8, 0)),
@@ -29,6 +32,7 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 8, 0)),
         ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
+    # expert arguments that the user can access through advanced settings
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
@@ -58,14 +62,16 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         self.uncrop = True
 
     def _make_request_data(self, **kwargs):
+        # call parent class's method to make request data
         request_data = ImageToImageCommand._make_request_data(self, **kwargs)
         StableDiffusionCommand._resize_canvas(self, **kwargs)
 
+        # adding script name and script arguments
         request_data['script_name'] = "Outpainting mk2"
 
         # ----------------- script args -----------------
         script_args = [0]
-        # padding
+        # padding calculations
         pad_left, pad_right, pad_top, pad_btm = kwargs.get(
             'padding_left', 128), kwargs.get('padding_right', 128), kwargs.get('padding_top', 128), kwargs.get('padding_bottom', 128)
         max_padding = max(pad_left, pad_right, pad_top, pad_btm)
@@ -96,6 +102,7 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         # color variation
         script_args.append(kwargs.get('color_variation', 0.05))
 
+        # adding the script arguments in the request data
         request_data['script_args'] = script_args
 
         return request_data

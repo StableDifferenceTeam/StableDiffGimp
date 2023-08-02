@@ -16,12 +16,13 @@ import os
 
 
 class StableDifferenceCommand(Thread):
+    # define layer results and command metadata using namedtuples
     LayerResult = namedtuple('LayerResult', 'name img children')
-    # CommandMetadata is a named tuple that contains everything that is needed to register a command in gimp
+    # commandMetadata is a named tuple that contains everything that is needed to register a command in gimp
     # except the function that is called when the command is executed
     CommandMetadata = namedtuple(
         'CommandMetadata', 'proc_name, blurb, help, author, copyright, date, label, imagetypes, params, results')
-    # we initialize the metadata with None, because it is set in the run_command method
+    # initialize metadata with None; it is set in run_command method
     metadata = None
     command_runner = None
     # name of the Command, shows up as title of the gtk dialog

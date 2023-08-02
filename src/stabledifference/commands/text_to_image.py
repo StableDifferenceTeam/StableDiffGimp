@@ -2,9 +2,12 @@ import gimpfu
 import stabledifference as sdiff
 from Command import StableDiffusionCommand
 
-
+# class inherits from StableDiffusionCommand and defines a command
+# to transform text into an image using StableDifference. 
 class TextToImageCommand(StableDiffusionCommand):
+    # URI endpoint for the text to image conversion
     uri = "sdapi/v1/txt2img"
+    # command metadata for registering the command with GIMP.
     metadata = StableDiffusionCommand.CommandMetadata(
         "SimpleTextToImageCommand",
         "StableDifference " + sdiff.__version__ + ": Text to Image",
@@ -17,11 +20,14 @@ class TextToImageCommand(StableDiffusionCommand):
         [],
         [],
     )
+    # command name displayed to the user
     name = "Text to Image"
+    # simple arguments that the user sees by default in the dialog box
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
+    # expert arguments that the user can access through advanced settings
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),

@@ -5,7 +5,9 @@ import hashlib
 
 
 class UpscaleCommand(StableDiffusionCommand):
+    # endpoint URI for the command
     uri = "sdapi/v1/extra-single-image"
+    # metadata for the command
     metadata = StableDiffusionCommand.CommandMetadata(
         "UpscaleCommand",
         "StableDifference " + sdiff.__version__ + ": Upscale",
@@ -18,10 +20,13 @@ class UpscaleCommand(StableDiffusionCommand):
         [],
         [],
     )
+    # command name displayed to the user
     name = "Upscale"
+    # simple arguments that the user sees by default in the dialog box
     simple_args = [
         ("SLIDER", "upscaling_resize", "Upscaling Factor", 2, (2, 4, 1, 0)),
     ]
+    # expert arguments that the user can access through advanced settings
     expert_args = [
         ("OPTION", 'upscaler_1', 'Upscaler 1', 1, sdiff.constants.UPSCALERS),
         ("OPTION", 'upscaler_2', 'Upscaler 2', 0, sdiff.constants.UPSCALERS),
@@ -30,6 +35,7 @@ class UpscaleCommand(StableDiffusionCommand):
     ]
 
     def __init__(self, **kwargs):
+        # constructor initializes the command and calculates padding for upscaling
         StableDiffusionCommand.__init__(self, **kwargs)
         width = self.width
         height = self.height
@@ -41,6 +47,7 @@ class UpscaleCommand(StableDiffusionCommand):
         self.padding_bottom = (height * upscaling_resize - height) / 2
 
     def _make_request_data(self, **kwargs):
+        # constructs request data for upscaling
         request_data = {}
         # instead of 'images' we use 'image' for single image commands
         # we do it in the beginning, so the image is without recrop
@@ -72,8 +79,8 @@ class UpscaleCommand(StableDiffusionCommand):
         return request_data
 
     def _process_response(self, resp):
-        # create layer result
-        def _mk_short_hash(img):  # create hash for image
+        # processes the response, extracting the upscaled image and creating a hash for it
+        def _mk_short_hash(img): 
             return hashlib.sha1(img.encode("UTF-8")).hexdigest()[:7]
         img = resp['image']
         self.layers = StableDiffusionCommand.LayerResult(
