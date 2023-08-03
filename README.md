@@ -7,7 +7,7 @@ This is a plugin for GIMP that allows you to incorporate Stable Diffusion into y
 ## Installation
 ***
 1. Download GIMP or verify, that you own the newest version of GIMP
-2. Clone [The Stable Diff Gimp Repository] (https://github.com/StableDifferenceTeam/StableDiffGimp.git) by typing `git clone https://github.com/StableDifferenceTeam/StableDiffGimp.git` in your terminal
+2. Clone [The Stable Diff Gimp Repository](https://github.com/StableDifferenceTeam/StableDiffGimp.git) by typing `git clone https://github.com/StableDifferenceTeam/StableDiffGimp.git` in your terminal
 3. Go to GIMP and add the Plugin to the list of plugins:
     - Open GIMP
     - Click on `Settings`
@@ -25,7 +25,7 @@ This is a plugin for GIMP that allows you to incorporate Stable Diffusion into y
 ## Simple or more advanced?
 ***
 Each of our features has a drop-down menu, so if you are a user with vast knowledge or you seek more customizability, click on `Expand`
-You find an explanation of what each setting does [here](##what-does-each-setting-do?)
+You find an explanation of what each setting does [here](#what-does-each-setting-do?)
 
 
 ## Settings 
@@ -45,11 +45,11 @@ You find an explanation of what each setting does [here](##what-does-each-settin
 	- To add an image, you can use drag and drop
 	- To add a new canvas, click on `File`, then `New`
 - Overview:
-	- [Image to Image](###image-to-image)
-	- [Inpainting](###inpainting)
-	- [Text to Image](###text-to-image)
-	- [Uncrop](###uncrop)
-	- [Upscale](###upscale)
+	- [Image to Image](#image-to-image)
+	- [Inpainting](#inpainting)
+	- [Text to Image](#text-to-image)
+	- [Uncrop](#uncrop)
+	- [Upscale](#upscale)
 - Depending on the step number and other factors, it may take some time to create an image. To make your wait time sweeter, we created some cute messages for you:
 
 
@@ -58,9 +58,9 @@ Modifies an existing image
 
 1. Make sure you have an image in your GIMP
 2. Click on `StableDifference`, then `Image to Image`
-3. A window should open up with a [prompt](####prompt), a [denoising strength](####denoising-strength) and a drop-down menu
+3. A window should open up with a [prompt](#prompt), a [denoising strength](#denoising-strength) and a drop-down menu
 	- Click on expand to customize further
-	- [Here](###expandable-menu) are our advanced options
+	- [Here](#expandable-menu) are our advanced options
 4. Choose your input and click on `Ok`
 5. You modified your image!
 
@@ -73,9 +73,9 @@ Paints a new image inside an existing image
 3. Mark the area you want the prompt to appear in
 4. Click on `StableDifference`, then `Inpainting`
 5. A window should open up 
-6. Write a [prompt](####prompt), choose a [denoising strength](####denoising-strength) and [steps](####steps)
+6. Write a [prompt](#prompt), choose a [denoising strength](#denoising-strength) and [steps](#steps)
 	- Click on expand to customize further
-	- [Here](###expandable-menu) are our advanced options
+	- [Here](#expandable-menu) are our advanced options
 7. Choose your input and click on `Ok`
 8. You modified your image!
 
@@ -85,9 +85,9 @@ Creates a new image from a prompt
 
 1. Click on `StableDifference`, then `Text to Image`
 2. A window should open up
-3. Write a [prompt](####prompt) and choose [steps](####steps)
+3. Write a [prompt](#prompt) and choose [steps](#steps)
 	- Click on expand to customize further
-	- [Here](###expandable-menu) are our advanced options
+	- [Here](#expandable-menu) are our advanced options
 4. Click on `Ok`
 5. You created an image by text!
 
@@ -98,10 +98,10 @@ Uncrops an existing image to a variable size and adds a prompt
 1. Insert an existing picture into your GIMP
 2. Click on `StableDifference`, then `Uncrop`
 3. A window should open up
-4. Write a [prompt](####prompt)
+4. Write a [prompt](#prompt)
 5. You can see different sliders for padding on the top, bottom, left and right 
 	- Each slider lets you choose how much space you add on the according side
-6. Choose in how many [steps](####steps) you want your image to be completed
+6. Choose in how many [steps](#steps) you want your image to be completed
 7. If you have settled on a number, click on `Ok`
 8. The image is now uncropped!
 
@@ -112,7 +112,7 @@ Makes an image higher-defined
 1. Insert an existing picture into your GIMP
 2. Click on `StableDifference`, then `Upscale`
 3. A window should open up
-4. Choose an [upscaling factor](####upscaling-factor)
+4. Choose an [upscaling factor](#upscaling-factor)
 5. If you have settled on a number, click on `Ok`
 6. The image is now upscaled!
 
