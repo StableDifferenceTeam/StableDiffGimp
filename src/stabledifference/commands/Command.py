@@ -330,7 +330,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
                 print("api: "+self.prompt_gen_api_url)
                 user_prompt=self.req_data.get('prompt')
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
-                url=os.path.join(self.prompt_gen_api_url, 'run/predict')
+                url=urljoin(self.prompt_gen_api_url, 'run/predict')
                 print(url)
                 req = Request(url)
                 req.add_header('Content-Type', 'application/json')

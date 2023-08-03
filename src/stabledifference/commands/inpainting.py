@@ -23,7 +23,7 @@ class InpaintingCommand(ImageToImageCommand):
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", "denoising_strength",
          "Denoising strength %", 75.0, (0, 100, 1, 0)),
-        ("SLIDER", "steps", "Steps", 25, (1, 150, 25, 1)),
+        ("SLIDER", "steps", "Steps", 25, (1, 150, 25, 0)),
     ]
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),

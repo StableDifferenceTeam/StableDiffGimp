@@ -30,6 +30,8 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
     expert_args = [
+        ("SLIDER", 'fall_off_exponent', 'Fall off exponent', 1, (0, 4, 0.1, 2)),
+        ("SLIDER", 'color_variation', 'Color variation', 0.05, (0, 1, 0.01, 2)),
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),
         ("OPTION", 'sampler_index', 'Sampler', 0, sdiff.constants.SAMPLERS),

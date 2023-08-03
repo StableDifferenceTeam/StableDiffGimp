@@ -29,22 +29,24 @@ def run_stable_diffusion_command(cmd):
         progressbar = gtk.ProgressBar()
         progressbar.set_fraction(0.0)
         progressbar.set_pulse_step(0.1)
+        progressbar.set_size_request(-1, 50)
         progressbar.set_text("Processing...")
 
-        
-            
-
         # add the progress bar to the dialog
-        dialog.vbox.pack_start(progressbar, True, True, 0)
+        dialog.vbox.pack_start(progressbar, True, True, 10)
 
         if cmd.prompt_gen_api_url != "":
+            frame = gtk.Frame("Generated Prompt")
             prompt = gtk.Label(cmd.generated_prompt)
             prompt.set_line_wrap(True)
             prompt.set_alignment(0.5, 0.5)
+            prompt.set_selectable(True)
+            prompt.set_size_request(440, -1)
+            frame.add(prompt)
         
-            dialog.vbox.pack_start(prompt, True, True, 0)
-            prompt.show()
-            
+            dialog.vbox.pack_start(frame, True, True, 0)
+            #prompt.show()
+        
         progressbar.show()
         dialog.show()
 
@@ -52,6 +54,7 @@ def run_stable_diffusion_command(cmd):
         cmd.start()
 
         i = 0
+        x = True
         progress_texts = sdiff.constants.PROGRESS_TEXTS
         # update the progress bar until the command is done or an error occurs
         while cmd.status != "DONE" and cmd.status != "ERROR":
@@ -63,8 +66,11 @@ def run_stable_diffusion_command(cmd):
                 progressbar.set_text(new_text)
 
             progressbar.pulse()
-            if cmd.prompt_gen_api_url != "" and cmd.generated_prompt != "":
-                prompt.set_text("Generated prompt:\n"+cmd.generated_prompt)
+            if cmd.prompt_gen_api_url != "" and cmd.generated_prompt != "" and x:
+                prompt.set_text(cmd.generated_prompt)
+                prompt.show()
+                frame.show()
+                x = False
             # update the dialog
             while gtk.events_pending():
                 gtk.main_iteration()
