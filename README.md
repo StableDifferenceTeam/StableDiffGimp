@@ -7,7 +7,7 @@ This is a plugin for GIMP that allows you to incorporate Stable Diffusion into y
 
 ## Installation
 ***
-1. Download GIMP or verify, that you own the newest version of GIMP
+1. Download GIMP or verify that you have the newest version of GIMP
 2. Clone [The Stable Diff Gimp Repository](https://github.com/StableDifferenceTeam/StableDiffGimp.git) by typing `git clone https://github.com/StableDifferenceTeam/StableDiffGimp.git` in your terminal
 3. Go to GIMP and add the Plugin to the list of plugins:
     - Open GIMP
@@ -19,24 +19,24 @@ This is a plugin for GIMP that allows you to incorporate Stable Diffusion into y
     - Close GIMP
     - Open it again and verify, that you have a StableDifference button <br><br>![settings](ReadMeBilder/Installation/10.png)<br><br>
 4. Start Stable Diffusion
-    - You can start it on your own PC. If you do that, in the settings should be: `http://localhost:7860`
+    - You can start it on your own PC. If you go this route, in the settings should be: `http://localhost:7860`
 5. Have fun using StableDifference! 
 
 
 ## Simple or more advanced?
 ***
-Each of our features has a drop-down menu, so if you are a user with vast knowledge or you seek more customizability, click on `Expand`
+Each of our features has a drop-down menu, so if you are a user with advanced knowledge or you seek more customizability, click on `Expand`
 You find an explanation of what each setting does [here](#what-does-each-setting-do?)
 
 
 ## Settings 
 ***
 1. Click on `StableDifference`, then `Settings` 
-2. A new window should open up, where you can add an API url
+2. A new window should open up where you can add an API url
 	- The default URL is `http://localhost:7860 `(which is your computer) 
 3. Choose if you want to use our prompt generator
 	- A prompt generator helps you to choose a prompt
-4. In a drop-down menu below, you can choose between Dark Mode, Light Mode or None for your pop-up windows
+4. In the drop-down menu below, you can choose between Dark Mode, Light Mode or None for your pop-up windows
 	- Dark Mode lets all of the pop-up windows appear in a dark theme, light mode in light and none in a classic theme
 <br><br>![settings](ReadMeBilder/Settings/13.png)<br><br>
 <br><br>![settings](ReadMeBilder/Settings/14.png)<br><br>
@@ -53,7 +53,7 @@ You find an explanation of what each setting does [here](#what-does-each-setting
 	- [Text to Image](#text-to-image)
 	- [Uncrop](#uncrop)
 	- [Upscale](#upscale)
-- Depending on the step number and other factors, it may take some time to create an image. To make your wait time sweeter, we created some cute messages for you:
+- Depending on the step number and other factors, it may take some time to create an image.
 <br><br>![settings](ReadMeBilder/Installation/12.png)<br><br>
 
 ### Image to Image
@@ -144,14 +144,14 @@ Makes an image higher-defined
 - What you do not want your image to include 
 
 #### Seed
-- Is a number from which Stable Diffusion adds noise to the picture
+- A number from which Stable Diffusion adds noise to the picture
 
 #### Sampler
 - A sampler creates a clear picture from noise
 - We have multiple samplers to choose from
 
 #### Restore faces
-- If you set it on `True` you can fill in missing or distorted parts of a face 
+- If you set it to `True` you can fill in missing or distorted parts of a face 
 
 #### CFG
 - Means Classifier Free Guidance scale
@@ -171,21 +171,21 @@ The following settings are just for inpainting
 - You can choose between four options
 
 #### Inpaint at full resolution
-- If you set it on `True`, you will inpaint at full resolution
+- If you set it to `True`, you will inpaint at full resolution
 
 #### Full resolution Inpaint padding
 - Set a padding for your inpainting with the slider
 	- 0 means no padding
 
 #### Autofit Inpainting Region
-- If you set it on `True`, the generated image will automatically fit your inpainting region
+- If you set it to `True`, the generated image will automatically fit your inpainting region
 
 #### Mask Blur
 - With the slider, set a blur of the Inpainting Mask
 	- The higher the number, the higher the blur
 
 #### Apply Inpainting Mask
-- Set on `True`, if you want to apply the Inpainting Mask to your output
+- Set to `True`, if you want to apply the Inpainting Mask to your output
 
 ***
 The following settings are just for upscaling
