@@ -28,6 +28,8 @@ class UncropCommand(ImageToImageCommand):  # change to stablediffusioncommand
         ("SLIDER", "padding_top", "Padding top", 128, (0, 256, 8, 0)),
         ("SLIDER", "padding_bottom", "Padding bottom", 128, (0, 256, 8, 0)),
         ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
+        ("SLIDER", "denoising_strength",
+         "Denoising strength %", 75.0, (0, 100, 1, 0)),
     ]
     expert_args = [
         ("SLIDER", 'fall_off_exponent', 'Fall off exponent', 1, (0, 4, 0.1, 2)),
