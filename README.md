@@ -7,21 +7,30 @@ This is a plugin for GIMP that allows you to incorporate Stable Diffusion into y
 
 ## Installation
 ***
-1. Download GIMP or verify that you have the newest version of GIMP
-2. Clone [The Stable Diff Gimp Repository](https://github.com/StableDifferenceTeam/StableDiffGimp.git) by typing `git clone https://github.com/StableDifferenceTeam/StableDiffGimp.git` in your terminal
+
+1. Download GIMP or verify, that you own the newest version of GIMP [Download Link](https://www.gimp.org/downloads/)
+2. Clone [The Stable Diff Gimp Repository](https://github.com/StableDifferenceTeam/StableDiffGimp.git) 
+   - by typing `git clone https://github.com/StableDifferenceTeam/StableDiffGimp.git` in your terminal (MacOS/Linux) or command prompt (Windows)
+   - or by downloading the zip file [zip file](https://github.com/StableDifferenceTeam/StableDiffGimp/archive/refs/heads/main.zip) and extracting it
 3. Go to GIMP and add the Plugin to the list of plugins:
     - Open GIMP
-    - Click on `Settings`
-    - Click on `Folder`
-    - Click on `Plugins`
+    - Go to `Edit/Preferences/Folders/Plugins`
     - Click on `Add a new folder`
     - Type in the location of your StableDiffGimp **src** folder. It should look something like: **/Users/.../StableDiffGimp/src**
-    - Close GIMP
-    - Open it again and verify, that you have a StableDifference button <br><br>![settings](ReadMeBilder/Installation/10.png)<br><br>
-4. Start Stable Diffusion
-    - You can start it on your own PC. If you go this route, in the settings should be: `http://localhost:7860`
-5. Have fun using StableDifference! 
-
+    - Restart GIMP and verify, that you have a StableDifference button in the top bar <br><br>![settings](ReadMeBilder/Installation/10.png)<br><br>
+4. Install the AUTOMATIC1111's Stable Diffusion WebUI
+  	- You can find the installation instructions [here](https://github.com/AUTOMATIC1111/stable-diffusion-webui#installation-and-running)
+  	- Set up the API by going into your now cloned AUTOMATIC1111's Stable Diffusion WebUI folder and changing `commandline_args` in the file `launch.py` to `commandline_args = os.environ.get('COMMANDLINE_ARGS', "--api")`
+  	- Now you can start the API by typing `webui-user.bat` in your terminal (MacOS/Linux) or command prompt (Windows)
+    	- You have to have [Python](https://www.python.org/downloads/release/python-3106/) installed on your computer
+5. Back in GIMP, you can now go to `StableDifference/Settings` and change the Stable Diffusion API base URL to the generated Link
+		- The default URL is `http://localhost:7860` (which is your computer)
+6. You can now use Stable Diffusion Methods in GIMP!
+7. Using prompt generation (optional)
+    - Install the Prompt Generator by following the instructions [here](https://huggingface.co/Gustavosta/MagicPrompt-Stable-Diffusion)
+    - Go to `StableDifference/Settings` and input your API Link to Prompt generators API base URL
+    - Now each time you start a Stable Diffusion method, the prompt you input will be optimized by the prompt generator first
+  
 
 ## Simple or more advanced?
 ***
@@ -73,7 +82,7 @@ Paints a new image inside an existing image
 
 1. Make sure you have an image in your GIMP
 2. Create a new layer and call it `Inpainting Mask` <br><br>![settings](ReadMeBilder/Inpainting/5.png)<br><br>
-3. Mark the area you want the prompt to appear in <br><br>![settings](ReadMeBilder/Inpainting/spacemark.png)<br><br>
+3. Mark the area you want the prompt to appear in <br><br>![settings](ReadMeBilder/Inpainting/spacemark.png)<br><br> by painting it Black
 4. Click on `StableDifference`, then `Inpainting`
 5. A window should open up <br><br>![settings](ReadMeBilder/Inpainting/6.png)<br><br>
 6. Write a [prompt](#prompt), choose a [denoising strength](#denoising-strength) and [steps](#steps)
@@ -104,7 +113,10 @@ Uncrops an existing image to a variable size and adds a prompt
 4. Write a [prompt](#prompt)
 5. You can see different sliders for padding on the top, bottom, left and right 
 	- Each slider lets you choose how much space you add on the according side
+ 	- When a slider is set to 0, it will not be extended on that side, speeding up the process	
 6. Choose in how many [steps](#steps) you want your image to be completed <br><br>![settings](ReadMeBilder/Uncrop/20.png)<br><br>
+	- Uncrop benefits from a high number of steps, so consider about 80-100 Steps
+ 	- This will result in a better result, but it will take longer to generate	
 7. If you have settled on a number, click on `Ok`
 8. The image is now uncropped! <br><br>![settings](ReadMeBilder/Uncrop/22.png)<br><br>
 
