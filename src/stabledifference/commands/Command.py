@@ -8,11 +8,10 @@ from urllib2 import Request, urlopen
 from collections import namedtuple
 from stabledifference.command_runner import config
 import stabledifference as sdiff
-import gimpfu
 import gtk
 from gimpfu import *
-import time
 import os
+import traceback
 
 
 class StableDifferenceCommand(Thread):
@@ -340,10 +339,10 @@ class StableDiffusionCommand(StableDifferenceCommand):
                     response = urlopen(req, json.dumps(prompt_gen_data))
                     data_json = json.loads(response.read())
                     self.req_data.update({'prompt':data_json.get('data')[0]})
-                    self.generated_prompt = data_json.get('data')[0]
+                    self.generated_prompt = str(data_json.get('data')[0])
                     print("Generated prompt: "+self.generated_prompt)
                 except Exception as e:
-                    print(e)
+                    print(traceback.format_exc())
                     pdb.gimp_message_set_handler(MESSAGE_BOX)
                     pdb.gimp_message("-----------------------------------------------------------------------------------\n" +
                              "An error occurred while calling the prompt generation model:\n" +
@@ -380,7 +379,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
 
             print("command exception:")
             self.error_msg = str(e)
-            print(e)
+            print(traceback.format_exc())
             self.status = 'ERROR'
 
     def _process_response(self, resp):

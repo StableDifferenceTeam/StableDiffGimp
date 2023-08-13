@@ -5,6 +5,7 @@ from .config import Config as config
 from time import time, sleep
 import random
 import stabledifference as sdiff
+import traceback
 
 # basic Command runner, no progress updates
 def run_command(cmd):
@@ -109,4 +110,5 @@ def run_stable_diffusion_command(cmd):
                         "-----------------------------------------------------------------------------------\n"+
                         str(e))
         
-        print("Error: " + str(e))
+        print("Error while executing the command:")
+        print(traceback.format_exc())
