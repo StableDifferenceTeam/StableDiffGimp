@@ -19,12 +19,16 @@ class InpaintingCommand(ImageToImageCommand):
         [],
     )
     name = "Inpainting"
+
+    # the arguments needed when using 'simple mode'/the options aren't expanded + their default values
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", "denoising_strength",
          "Denoising strength %", 75.0, (0, 100, 1, 0)),
         ("SLIDER", "steps", "Steps", 25, (1, 150, 25, 1)),
     ]
+    
+    # if the window has been expanded/'expert mode' is being used
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),

@@ -261,7 +261,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
     path = os.path.dirname(os.path.abspath(__file__))
     path = os.path.dirname(os.path.dirname(os.path.dirname(path)))
 
-    # check if settings.json exists, if not, create it and add the default api url
+    # check if settings.json exists, if not, create it and add the default api url and no styling
     if not os.path.isfile(os.path.join(path, "settings.json")):
         print("settings.json does not exist")
         with open(os.path.join(path, "settings.json"), 'w') as f:
@@ -269,14 +269,14 @@ class StableDiffusionCommand(StableDifferenceCommand):
                        "prompt_gen_api_base_url": sdiff.constants.DEFAULT_PROMPT_GEN_API_URL,
                       "styling": "None"}, f)
 
-    # read the api url from the settings.json file
+    # read the sd api url/prompt gen api url/theme from the settings.json file
     with open(os.path.join(path, "settings.json"), 'r') as f:
         settings = json.load(f)
         api_url = settings['api_base_url']
         prompt_gen_api_url = settings['prompt_gen_api_base_url']
         styling = settings['styling']
     
-    # set the styling
+    # pass the styling to gtk
     if styling != "None":
         style_path = os.path.join(path, "src", "style")
         gtk.rc_parse(os.path.join(style_path, styling.replace(" ", "_")))
@@ -290,51 +290,51 @@ class StableDiffusionCommand(StableDifferenceCommand):
         self.layers = None  # layers to be processed
         self.uncrop = False  # wether it is a uncrop request or not
 
-        self.x, self.y, self.width, self.height = self._determine_active_area()  # selected area
+        # selected area
+        self.x, self.y, self.width, self.height = self._determine_active_area()  
 
-        print('x, y, w, h: ' + str(self.x) + ', ' + str(self.y) +
+        print('command area:\nx, y, w, h: ' + str(self.x) + ', ' + str(self.y) +
               ', ' + str(self.width) + ', ' + str(self.height))
 
+        # layers are the default img_target
         self.img_target = sdiff.constants.IMAGE_TARGETS[kwargs.get(
-            'img_target', 0)]  # layers are the default img_target
+            'img_target', 0)]  
 
+        # convert request data to dictionary
         self.req_data = self._make_request_data(**kwargs)
+
+        # check if a timeout has been configured 
+        # and calculate how long the execution may take or use a default value
         if config.TIMEOUT_REQUESTS:
             self.timeout = self._estimate_timeout(self.req_data)
         else:
-            self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT  # type: ignore
-
-    # the method conducting the request
-    def start_request(self):
-        try:
-            self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
-        except Exception as e:
-            self.error_msg = str(e)
-            self.status = 'ERROR'
+            self.timeout = socket._GLOBAL_DEFAULT_TIMEOUT
 
     def run(self):
         self.status = 'RUNNING'
 
         try:
-            # prints out a request path
+            # print/log the request path if desired
             if config.LOG_REQUESTS:
                 req_path = tempfile.mktemp(prefix='req_', suffix='.json')
                 with open(req_path, 'w') as req_file:
-                    print('request: ' + req_path)
+                    print('request path: ' + req_path)
                     req_file.write(json.dumps(self.req_data))
 
-            #use prompt generation
-            prompt = self.req_data.get('prompt')
-            if type(prompt) == str and len(prompt) is not 0 and len(self.prompt_gen_api_url) is not 0:
-                print("Prompt: "+prompt)
+            # use prompt generation the command contains a prompt
+            # and if the user specified an api url for that
+            user_prompt = self.req_data.get('prompt')
+            if type(user_prompt) == str and len(user_prompt) is not 0 and len(self.prompt_gen_api_url) is not 0:
+                print("Prompt of the user: "+user_prompt)
                 print("api: "+self.prompt_gen_api_url)
-                user_prompt=self.req_data.get('prompt')
+
+                # create request for prompt generator
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
                 url=os.path.join(self.prompt_gen_api_url, 'run/predict')
-                print(url)
                 req = Request(url)
                 req.add_header('Content-Type', 'application/json')
                 
+                # try sending the request and include the result in the request to the sd api
                 try:
                     response = urlopen(req, json.dumps(prompt_gen_data))
                     data_json = json.loads(response.read())
@@ -359,27 +359,20 @@ class StableDiffusionCommand(StableDifferenceCommand):
 
             self.sd_resp = urlopen(self.sd_request, timeout=self.timeout)
 
-            # if it failed for some reason
-            if self.status == 'ERROR':
-                print("ERROR while conducting the request:")
-                print(self.error_msg)
-                gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR, gtk.BUTTONS_CANCEL,
-                                  "An error occurred while calling the generative model:\n"+str(self.error_msg)).run()
+            
+            if self.sd_resp:
+                self.response = json.loads(
+                    self.sd_resp.read())  # read response
+                if config.LOG_REQUESTS:
+                    # create temporary response file
+                    resp_path = tempfile.mktemp(
+                        prefix='resp_', suffix='.json')
+                    with open(resp_path, 'w') as resp_file:  # write response to file
+                        print('response: ' + resp_path)
+                        resp_file.write(json.dumps(self.response))
 
-            else:
-                if self.sd_resp:
-                    self.response = json.loads(
-                        self.sd_resp.read())  # read response
-                    if config.LOG_REQUESTS:
-                        # create temporary response file
-                        resp_path = tempfile.mktemp(
-                            prefix='resp_', suffix='.json')
-                        with open(resp_path, 'w') as resp_file:  # write response to file
-                            print('response: ' + resp_path)
-                            resp_file.write(json.dumps(self.response))
-
-                # process response (see below)
-                self._process_response(self.response)
+            # process response (see below)
+            self._process_response(self.response)
             self.status = 'DONE'
 
         except Exception as e:  # catch ERROR
@@ -446,6 +439,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
         for layer in self.img.layers:
             pdb.gimp_layer_resize_to_image_size(layer)
 
+    # rescale the image if uncrop is being used
     def _rescale_uncrop(self, layers_names):
         translate_x = self.padding - self.padding_left if self.padding_left > 0 else 0
         translate_y = self.padding - self.padding_top if self.padding_top > 0 else 0

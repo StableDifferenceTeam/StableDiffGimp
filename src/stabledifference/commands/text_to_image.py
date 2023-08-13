@@ -18,10 +18,14 @@ class TextToImageCommand(StableDiffusionCommand):
         [],
     )
     name = "Text to Image"
+    
+    # the arguments needed when using 'simple mode'/the options aren't expanded + their default values
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", 'steps', 'Steps', 25, (1, 150, 1, 0)),
     ]
+
+    # if the window has been expanded/'expert mode' is being used
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),

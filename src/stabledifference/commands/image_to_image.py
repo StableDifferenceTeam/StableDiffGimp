@@ -19,11 +19,15 @@ class ImageToImageCommand(StableDiffusionCommand):
     )
 
     name = "Image to Image"
+
+    # the arguments needed when using 'simple mode'/the options aren't expanded + their default values
     simple_args = [
         ("STRING", "prompt", "Prompt", ""),
         ("SLIDER", 'denoising_strength',
          'Denoising Strength %', 50, (0, 100, 1, 0))
     ]
+
+    # if the window has been expanded/'expert mode' is being used
     expert_args = [
         ("STRING", "negative_prompt", "Negative Prompt", ""),
         ("STRING", 'seed', 'Seed', '-1'),

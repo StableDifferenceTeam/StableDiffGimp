@@ -19,9 +19,13 @@ class UpscaleCommand(StableDiffusionCommand):
         [],
     )
     name = "Upscale"
+
+    # the arguments needed when using 'simple mode'/the options aren't expanded + their default values
     simple_args = [
         ("SLIDER", "upscaling_resize", "Upscaling Factor", 2, (2, 4, 1, 0)),
     ]
+
+    # if the window has been expanded/'expert mode' is being used
     expert_args = [
         ("OPTION", 'upscaler_1', 'Upscaler 1', 1, sdiff.constants.UPSCALERS),
         ("OPTION", 'upscaler_2', 'Upscaler 2', 0, sdiff.constants.UPSCALERS),

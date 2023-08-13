@@ -6,14 +6,12 @@ from time import time, sleep
 import random
 import stabledifference as sdiff
 
-# Basic Command runner, no progress updates
-
-
+# basic Command runner, no progress updates
 def run_command(cmd):
     cmd.start()
     cmd.join()
 
-
+# command runner for commands based on stable diffusion
 def run_stable_diffusion_command(cmd):
     try:
         # open a new dialog for the progress bar
@@ -76,7 +74,8 @@ def run_stable_diffusion_command(cmd):
             pdb.gimp_message_set_handler(MESSAGE_BOX)
             pdb.gimp_message("-----------------------------------------------------------------------------------\n" +
                              "An error occurred while calling the generative model:\n" +
-                             "-----------------------------------------------------------------------------------\n"+str(cmd.error_msg))
+                             "-----------------------------------------------------------------------------------\n"+
+                             str(cmd.error_msg))
 
         # if the command succeeded
         else:
@@ -96,5 +95,12 @@ def run_stable_diffusion_command(cmd):
 
             cmd.img.undo_group_end()
 
+    # if anything in the execution goes wrong, report it to the user
     except Exception as e:
+        pdb.gimp_message_set_handler(MESSAGE_BOX)
+        pdb.gimp_message("-----------------------------------------------------------------------------------\n" +
+                        "An error occurred during the commands execution:\n" +
+                        "-----------------------------------------------------------------------------------\n"+
+                        str(e))
+        
         print("Error: " + str(e))

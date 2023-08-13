@@ -5,8 +5,6 @@ import base64
 import constants
 
 # encodes a png image to base64
-
-
 def encode_png(img_path):
     with open(img_path, "rb") as img:
         # base64 encodes 8-bit binary data
