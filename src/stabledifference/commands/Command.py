@@ -70,7 +70,8 @@ class StableDifferenceCommand(Thread):
             for option in options:
                 if option[0] == "STRING":
                     hbox = gtk.HBox(True, 10)
-                    new_label = gtk.Label(option[2])
+                    new_label = gtk.Label()
+                    new_label.set_markup(option[2])
                     new_entry = gtk.Entry()
                     new_entry.set_name(option[1])
                     new_entry.set_text(option[3])
@@ -210,7 +211,7 @@ class StableDifferenceCommand(Thread):
         # Create a new GTK dialog and set its Name
         dialog = gtk.Dialog(title=self.name)
         dialog.present()
-        dialog.set_size_request(500, -1)
+        dialog.set_size_request(600, -1)
         dialog.set_border_width(10)
         dialog.vbox.set_spacing(3)
 
@@ -330,7 +331,7 @@ class StableDiffusionCommand(StableDifferenceCommand):
 
                 # create request for prompt generator
                 prompt_gen_data={"data":[user_prompt],"event_data":"null","fn_index":0,"session_hash":""}
-                url=os.path.join(self.prompt_gen_api_url, 'run/predict')
+                url=urljoin(self.prompt_gen_api_url, 'run/predict')
                 req = Request(url)
                 req.add_header('Content-Type', 'application/json')
                 
