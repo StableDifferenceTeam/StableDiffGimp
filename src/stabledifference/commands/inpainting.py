@@ -68,8 +68,8 @@ class InpaintingCommand(ImageToImageCommand):
         return req_data
 
     def _determine_active_area(self):
-
-        if self.autofit_inpainting:
+        x, y, width, height = StableDiffusionCommand._determine_active_area(self)
+        if self.autofit_inpainting and not (width > 512 or height > 512):
             return sdiff.gimp.autofit_inpainting_area(self.img)
         else:
-            return StableDiffusionCommand._determine_active_area(self)
+            return (x, y, width, height)
