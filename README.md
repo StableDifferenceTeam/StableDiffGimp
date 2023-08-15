@@ -1,3 +1,5 @@
+
+<img src="ReadMeBilder/logo.png" width="100"/> <br> 
 # StableDifference
 ## Description
 ***
